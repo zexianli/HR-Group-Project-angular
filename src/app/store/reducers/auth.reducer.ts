@@ -25,7 +25,7 @@ export const initialState: AuthState = {
 
 export const authReducer = createReducer(
   initialState,
-  on(AuthActions.login, (state) => ({
+  on(AuthActions.login, state => ({
     ...state,
     status: 'loading' as const,
     error: null,
@@ -44,7 +44,7 @@ export const authReducer = createReducer(
       error: null,
     };
   }),
-  on(AuthActions.logout, (state) => {
+  on(AuthActions.logout, state => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('role');

@@ -26,7 +26,7 @@ export class AuthService {
     return from(
       this.api
         .post<LoginResponse>('/auth/login', { email, password })
-        .then((response) => response.data)
+        .then(response => response.data)
     );
   }
 
@@ -36,7 +36,7 @@ export class AuthService {
         .get<User>('/auth/me', {
           headers: { Authorization: `Bearer ${token}` },
         })
-        .then((response) => response.data)
+        .then(response => response.data)
     );
   }
 }
