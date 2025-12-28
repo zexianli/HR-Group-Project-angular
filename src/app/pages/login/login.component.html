@@ -1,11 +1,40 @@
-<form (ngSubmit)="login()">
-  <label for="username">Username</label>
-  <input type="text" id="username" name="username" [(ngModel)]="username" />
-  testhr
-  <br />
-  <label for="password">Password</label>
-  <input type="password" id="password" name="password" [(ngModel)]="password" />
-  @TesthrPW123
-  <br />
-  <button type="submit">Submit</button>
-</form>
+<div id="outer-container">
+  <div id="form-container">
+    <div id="message-container">
+      <!-- Image -->
+      <img
+        src="https://media.licdn.com/dms/image/v2/C560BAQEgZyD0JY8dTA/company-logo_200_200/company-logo_200_200/0/1630645938186?e=2147483647&v=beta&t=8e3vgpblR4anayWp8iW0v-hFsp7Y6RdSCORHB9r18-k"
+        alt="beaconfire"
+        style="width: 100px; height: 100px" />
+      <!-- header (Welcoe Back) -->
+      <h1>Welcome Back</h1>
+      <!-- paragprah (Log in to access your account and continue the onboarding process.) -->
+      <p>Log in to access your account.</p>
+    </div>
+    <form (ngSubmit)="login()">
+      <div id="input-container">
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Username</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="e.g, testhr"
+            name="username"
+            [(ngModel)]="username" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Password</mat-label>
+          <input
+            type="password"
+            matInput
+            name="password"
+            [(ngModel)]="password" />
+        </mat-form-field>
+      </div>
+
+      <auth-button type="submit">LOGIN</auth-button>
+      <!-- <button type="submit">Submit</button> -->
+    </form>
+  </div>
+</div>
