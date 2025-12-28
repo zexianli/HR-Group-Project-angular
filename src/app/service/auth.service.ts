@@ -4,7 +4,12 @@ import { Observable, from } from 'rxjs';
 import { User, UserRole } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
 
-export interface LoginResponse {
+export interface LoginResponse<T> {
+  message: string;
+  data: T;
+}
+
+export interface LoginResponseData {
   user: User;
   token: string;
   role: UserRole;
@@ -22,10 +27,15 @@ export class AuthService {
     });
   }
 
-  login(email: string, password: string): Observable<LoginResponse> {
+  login(
+    username: string,
+    password: string
+  ): Observable<LoginResponse<LoginResponseData>> {
     return from(
       this.api
-        .post<LoginResponse>('/auth/login', { email, password })
+        .post<
+          LoginResponse<LoginResponseData>
+        >('/auth/login', { username, password })
         .then(response => response.data)
     );
   }
