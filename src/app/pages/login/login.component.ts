@@ -5,11 +5,21 @@ import { FormsModule } from '@angular/forms';
 // import { AuthService } from 'src/app/service/auth.service';
 import { AuthActions } from 'src/app/store/actions/auth.actions';
 import { Store } from '@ngrx/store';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ButtonComponent } from 'src/app/components/auth/button/button.component';
+// import { TextfieldComponent } from 'src/app/components/auth/textfield/textfield.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonComponent,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
