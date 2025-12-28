@@ -29,6 +29,7 @@ form {
   flex-direction: column;
   justify-content: space-between;
   align-items: end;
+  gap: 30px;
 }
 
 #input-container {
@@ -38,7 +39,9 @@ form {
 }
 
 h1 {
-  font-weight: 400;
+  font-size: 40px;
+  font-weight: 500;
+  font-family: 'Figtree', sans-serif;
 }
 
 #message-container {
