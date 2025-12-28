@@ -4,7 +4,11 @@ import { User, UserRole } from '../../interfaces/user.interface';
 export const AuthActions = createActionGroup({
   source: 'Auth',
   events: {
-    Login: props<{ email: string; password: string }>(),
+    Login: props<{
+      username: string;
+      password: string;
+      role: 'HR' | 'EMPLOYEE';
+    }>(),
     'Set Credentials': props<{ user: User; token: string; role: UserRole }>(),
     Logout: emptyProps(),
   },
