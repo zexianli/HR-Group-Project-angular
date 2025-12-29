@@ -9,6 +9,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { authReducer } from './store/reducers/auth.reducer';
 import { AuthEffects } from './store/effects/auth.effects';
+// import { NavbarComponent } from './components/home/navbar/navbar.component';
+// import { LayoutComponent } from './components/auth/layout/layout.component';
 
 @NgModule({
   declarations: [AppComponent],
