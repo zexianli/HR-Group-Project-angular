@@ -60,5 +60,24 @@ export const housingReducer = createReducer(
   on(HousingActions.clearHouseDetail, state => ({
     ...state,
     selectedHouse: null,
+  })),
+
+  on(HousingActions.createHouse, state => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(HousingActions.createHouseSuccess, (state, { house }) => ({
+    ...state,
+    loading: false,
+    error: null,
+    selectedHouse: house,
+  })),
+
+  on(HousingActions.createHouseFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
   }))
 );

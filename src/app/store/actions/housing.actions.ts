@@ -1,5 +1,11 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { HouseSummary, HouseDetail } from '../../interfaces/house.interface';
+import {
+  HouseSummary,
+  HouseDetail,
+  Address,
+  Landlord,
+  Facility,
+} from '../../interfaces/house.interface';
 
 export const HousingActions = createActionGroup({
   source: 'Housing',
@@ -13,5 +19,15 @@ export const HousingActions = createActionGroup({
     'Load House Detail Failure': props<{ error: string }>(),
 
     'Clear House Detail': emptyProps(),
+
+    'Create House': props<{
+      address: Address;
+      landlord: Landlord;
+      facility: Facility;
+      status?: 'ACTIVE' | 'INACTIVE';
+      description?: string;
+    }>(),
+    'Create House Success': props<{ house: HouseDetail }>(),
+    'Create House Failure': props<{ error: string }>(),
   },
 });

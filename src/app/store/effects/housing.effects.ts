@@ -47,4 +47,22 @@ export class HousingEffects {
       )
     )
   );
+
+  createHouse$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HousingActions.createHouse),
+      switchMap(action =>
+        this.housingService.createHouse(action).pipe(
+          map(house => HousingActions.createHouseSuccess({ house })),
+          catchError(error =>
+            of(
+              HousingActions.createHouseFailure({
+                error: error.message || 'Failed to create house',
+              })
+            )
+          )
+        )
+      )
+    )
+  );
 }
