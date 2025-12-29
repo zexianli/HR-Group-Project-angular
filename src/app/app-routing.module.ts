@@ -9,6 +9,7 @@ import { VisaManagementComponent } from './pages/main/visa-management/visa-manag
 import { HiringManagementComponent } from './pages/main/hiring-management/hiring-management.component';
 import { HousingManagementComponent } from './pages/main/housing/housing-management/housing-management.component';
 import { HouseDetailComponent } from './pages/main/housing/house-detail/house-detail.component';
+import { HouseFormComponent } from './pages/main/housing/house-form/house-form.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,7 @@ const routes: Routes = [
       { path: 'visa-management', component: VisaManagementComponent },
       { path: 'hiring-management', component: HiringManagementComponent },
       { path: 'housing-management', component: HousingManagementComponent },
+      { path: 'housing/new', component: HouseFormComponent },
       { path: 'housing/:id', component: HouseDetailComponent },
     ],
   },
