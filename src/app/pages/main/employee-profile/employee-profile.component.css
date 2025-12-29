@@ -1,0 +1,57 @@
+main {
+  padding: 0 5vw;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  height: calc(100% - 53px);
+}
+
+#employee-count {
+  margin-top: 20px;
+  padding: 20px;
+  border: solid 1px #abcdcf;
+  background-color: white;
+  border-radius: 10px;
+  flex: 0 0 250px;
+  height: 250px;
+}
+
+#employee-summary {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  gap: 30px;
+  margin: 20px 0;
+
+  .employee-summary-content-container {
+    border: solid 1px #abcdcf;
+    background-color: white;
+    border-radius: 10px;
+  }
+
+  /* search */
+  #search-container {
+    height: 100px;
+  }
+
+  /* summary */
+  #employees-list-container {
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+    width: 100%;
+    /* display: flex;
+    flex-direction: column; */
+    /* justify-content: space-between; */
+  }
+}
+
+.name {
+  cursor: pointer;
+}
+
+.name:hover {
+  color: blue;
+  text-decoration: underline;
+}
