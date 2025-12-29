@@ -1,0 +1,31 @@
+.housing-management-container {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.houses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.house-card {
+  cursor: pointer;
+}
+
+.house-info {
+  margin-top: 10px;
+}
+
+.residents-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
