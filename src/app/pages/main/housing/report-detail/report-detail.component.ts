@@ -27,8 +27,11 @@ export class ReportDetailComponent implements OnInit {
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
   commentControl = new FormControl('', [Validators.required]);
+  statusControl = new FormControl('');
   submittingComment = false;
+  updatingStatus = false;
   private reportId: string | null = null;
+  statusOptions = ['OPEN', 'IN_PROGRESS', 'CLOSED'];
 
   constructor(
     private route: ActivatedRoute,
@@ -76,6 +79,24 @@ export class ReportDetailComponent implements OnInit {
         console.error('Error creating comment:', error);
         this.submittingComment = false;
       },
+    });
+  }
+
+  onStatusChange(newStatus: string): void {
+    if (!this.reportId) {
+      return;
+    }
+
+    this.updatingStatus = true;
+    this.store.dispatch(
+      HousingActions.updateReportStatus({
+        reportId: this.reportId,
+        status: newStatus,
+      })
+    );
+
+    this.report$.subscribe(() => {
+      this.updatingStatus = false;
     });
   }
 

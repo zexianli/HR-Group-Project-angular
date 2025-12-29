@@ -154,5 +154,24 @@ export const housingReducer = createReducer(
     ...state,
     loading: false,
     error,
+  })),
+
+  on(HousingActions.updateReportStatus, state => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(HousingActions.updateReportStatusSuccess, (state, { report }) => ({
+    ...state,
+    currentReport: report,
+    loading: false,
+    error: null,
+  })),
+
+  on(HousingActions.updateReportStatusFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
   }))
 );

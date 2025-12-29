@@ -24,13 +24,19 @@
           <mat-card-title>
             <div class="title-header">
               <h2>{{ report.title }}</h2>
-              <span
-                class="report-status"
-                [class.status-open]="report.status === 'OPEN'"
-                [class.status-in-progress]="report.status === 'IN_PROGRESS'"
-                [class.status-closed]="report.status === 'CLOSED'">
-                {{ report.status.replace('_', ' ') }}
-              </span>
+              <mat-form-field appearance="outline" class="status-select">
+                <mat-label>Status</mat-label>
+                <mat-select
+                  [value]="report.status"
+                  (selectionChange)="onStatusChange($event.value)"
+                  [disabled]="updatingStatus">
+                  <mat-option
+                    *ngFor="let status of statusOptions"
+                    [value]="status">
+                    {{ status.replace('_', ' ') }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </mat-card-title>
         </mat-card-header>

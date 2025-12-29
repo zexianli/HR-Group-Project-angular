@@ -156,4 +156,17 @@ export class HousingService {
         .then(response => response.data.data)
     );
   }
+
+  updateReportStatus(
+    reportId: string,
+    status: string
+  ): Observable<HouseReport> {
+    return from(
+      this.api
+        .patch<ReportByIdResponse>(`/housing/reports/${reportId}`, {
+          status,
+        })
+        .then(response => response.data.data)
+    );
+  }
 }

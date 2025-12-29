@@ -47,5 +47,9 @@ export const HousingActions = createActionGroup({
     'Load Report Comments': props<{ reportId: string }>(),
     'Load Report Comments Success': props<{ comments: ReportComment[] }>(),
     'Load Report Comments Failure': props<{ error: string }>(),
+
+    'Update Report Status': props<{ reportId: string; status: string }>(),
+    'Update Report Status Success': props<{ report: HouseReport }>(),
+    'Update Report Status Failure': props<{ error: string }>(),
   },
 });

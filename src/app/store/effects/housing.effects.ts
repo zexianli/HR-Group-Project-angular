@@ -123,4 +123,22 @@ export class HousingEffects {
       )
     )
   );
+
+  updateReportStatus$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HousingActions.updateReportStatus),
+      switchMap(({ reportId, status }) =>
+        this.housingService.updateReportStatus(reportId, status).pipe(
+          map(report => HousingActions.updateReportStatusSuccess({ report })),
+          catchError(error =>
+            of(
+              HousingActions.updateReportStatusFailure({
+                error: error.message || 'Failed to update report status',
+              })
+            )
+          )
+        )
+      )
+    )
+  );
 }
