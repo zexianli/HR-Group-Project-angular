@@ -1,0 +1,112 @@
+<div class="house-detail-container">
+  <div class="header">
+    <button mat-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Housing Management
+    </button>
+  </div>
+
+  <div *ngIf="loading$ | async" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading house details...</p>
+  </div>
+
+  <div *ngIf="(error$ | async) && !(loading$ | async)" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error$ | async }}</p>
+    <button mat-button color="primary" (click)="goBack()">Go Back</button>
+  </div>
+
+  <div *ngIf="house$ | async as house" class="content">
+    <h1>{{ getFullAddress(house) }}</h1>
+
+    <div class="details-grid">
+      <mat-card class="detail-card">
+        <mat-card-header>
+          <mat-card-title>Address</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p *ngIf="house.address.unit">
+            <strong>Unit:</strong> {{ house.address.unit }}
+          </p>
+          <p><strong>Street:</strong> {{ house.address.street }}</p>
+          <p><strong>City:</strong> {{ house.address.city }}</p>
+          <p><strong>State:</strong> {{ house.address.state }}</p>
+          <p><strong>ZIP:</strong> {{ house.address.zip }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="detail-card">
+        <mat-card-header>
+          <mat-card-title>Landlord</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>Name:</strong> {{ house.landlord.fullName }}</p>
+          <p><strong>Phone:</strong> {{ house.landlord.phone }}</p>
+          <p><strong>Email:</strong> {{ house.landlord.email }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="detail-card">
+        <mat-card-header>
+          <mat-card-title>Facility</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>Bedrooms:</strong> {{ house.facility.bedrooms }}</p>
+          <p><strong>Bathrooms:</strong> {{ house.facility.bathrooms }}</p>
+          <p>
+            <strong>Mattresses:</strong> {{ house.facility.mattresses || 0 }}
+          </p>
+          <p><strong>Tables:</strong> {{ house.facility.tables || 0 }}</p>
+          <p><strong>Chairs:</strong> {{ house.facility.chairs || 0 }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="detail-card">
+        <mat-card-header>
+          <mat-card-title>Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>Status:</strong> {{ house.status }}</p>
+          <p *ngIf="house.description">
+            <strong>Description:</strong> {{ house.description }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <mat-card class="residents-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>people</mat-icon>
+          Residents ({{ house.residents.length }})
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="house.residents.length === 0" class="empty-residents">
+          <p>No residents assigned to this house.</p>
+        </div>
+        <div *ngIf="house.residents.length > 0" class="residents-list">
+          <div *ngFor="let resident of house.residents" class="resident-item">
+            <div class="resident-info">
+              <h3>{{ getResidentName(resident) }}</h3>
+              <p><strong>Phone:</strong> {{ resident.phone }}</p>
+              <p><strong>Email:</strong> {{ resident.email }}</p>
+              <div
+                *ngIf="resident.car && resident.car.make && resident.car.model"
+                class="car-info">
+                <p>
+                  <strong>Car:</strong> {{ resident.car.make }}
+                  {{ resident.car.model
+                  }}<span *ngIf="resident.car.color">
+                    ({{ resident.car.color }})</span
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
