@@ -65,4 +65,24 @@ export class HousingEffects {
       )
     )
   );
+
+  loadHouseReports$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HousingActions.loadHouseReports),
+      switchMap(({ houseId, page }) =>
+        this.housingService.getHouseReports(houseId, page).pipe(
+          map(({ reports, pagination }) =>
+            HousingActions.loadHouseReportsSuccess({ reports, pagination })
+          ),
+          catchError(error =>
+            of(
+              HousingActions.loadHouseReportsFailure({
+                error: error.message || 'Failed to load house reports',
+              })
+            )
+          )
+        )
+      )
+    )
+  );
 }

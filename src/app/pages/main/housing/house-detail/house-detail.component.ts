@@ -2,12 +2,19 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { HouseDetail } from '../../../../interfaces/house.interface';
+import { PageEvent } from '@angular/material/paginator';
+import {
+  HouseDetail,
+  HouseReport,
+  HouseReportsPagination,
+} from '../../../../interfaces/house.interface';
 import { HousingActions } from '../../../../store/actions/housing.actions';
 import {
   selectSelectedHouse,
   selectHousingLoading,
   selectHousingError,
+  selectHouseReports,
+  selectHouseReportsPagination,
 } from '../../../../store/selectors/housing.selectors';
 
 @Component({
@@ -19,6 +26,9 @@ export class HouseDetailComponent implements OnInit, OnDestroy {
   house$: Observable<HouseDetail | null>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  reports$: Observable<HouseReport[]>;
+  reportsPagination$: Observable<HouseReportsPagination | null>;
+  currentHouseId: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,17 +38,32 @@ export class HouseDetailComponent implements OnInit, OnDestroy {
     this.house$ = this.store.select(selectSelectedHouse);
     this.loading$ = this.store.select(selectHousingLoading);
     this.error$ = this.store.select(selectHousingError);
+    this.reports$ = this.store.select(selectHouseReports);
+    this.reportsPagination$ = this.store.select(selectHouseReportsPagination);
   }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
+      this.currentHouseId = id;
       this.store.dispatch(HousingActions.loadHouseDetail({ id }));
+      this.store.dispatch(
+        HousingActions.loadHouseReports({ houseId: id, page: 1 })
+      );
     }
   }
 
   ngOnDestroy(): void {
     this.store.dispatch(HousingActions.clearHouseDetail());
+  }
+
+  onPageChange(event: PageEvent): void {
+    if (this.currentHouseId) {
+      const page = event.pageIndex + 1;
+      this.store.dispatch(
+        HousingActions.loadHouseReports({ houseId: this.currentHouseId, page })
+      );
+    }
   }
 
   goBack(): void {

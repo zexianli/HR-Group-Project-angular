@@ -5,6 +5,8 @@ import {
   Address,
   Landlord,
   Facility,
+  HouseReport,
+  HouseReportsPagination,
 } from '../../interfaces/house.interface';
 
 export const HousingActions = createActionGroup({
@@ -29,5 +31,12 @@ export const HousingActions = createActionGroup({
     }>(),
     'Create House Success': props<{ house: HouseDetail }>(),
     'Create House Failure': props<{ error: string }>(),
+
+    'Load House Reports': props<{ houseId: string; page: number }>(),
+    'Load House Reports Success': props<{
+      reports: HouseReport[];
+      pagination: HouseReportsPagination;
+    }>(),
+    'Load House Reports Failure': props<{ error: string }>(),
   },
 });

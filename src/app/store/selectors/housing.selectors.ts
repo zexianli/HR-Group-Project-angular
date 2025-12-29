@@ -23,3 +23,13 @@ export const selectHousingError = createSelector(
   selectHousingState,
   (state: HousingState) => state.error
 );
+
+export const selectHouseReports = createSelector(
+  selectHousingState,
+  (state: HousingState) => state.reports
+);
+
+export const selectHouseReportsPagination = createSelector(
+  selectHousingState,
+  (state: HousingState) => state.reportsPagination
+);

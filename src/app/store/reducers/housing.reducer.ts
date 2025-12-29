@@ -1,10 +1,17 @@
 import { createReducer, on } from '@ngrx/store';
-import { HouseSummary, HouseDetail } from '../../interfaces/house.interface';
+import {
+  HouseSummary,
+  HouseDetail,
+  HouseReport,
+  HouseReportsPagination,
+} from '../../interfaces/house.interface';
 import { HousingActions } from '../actions/housing.actions';
 
 export interface HousingState {
   houses: HouseSummary[];
   selectedHouse: HouseDetail | null;
+  reports: HouseReport[];
+  reportsPagination: HouseReportsPagination | null;
   loading: boolean;
   error: string | null;
 }
@@ -12,6 +19,8 @@ export interface HousingState {
 export const initialState: HousingState = {
   houses: [],
   selectedHouse: null,
+  reports: [],
+  reportsPagination: null,
   loading: false,
   error: null,
 };
@@ -76,6 +85,29 @@ export const housingReducer = createReducer(
   })),
 
   on(HousingActions.createHouseFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  on(HousingActions.loadHouseReports, state => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(
+    HousingActions.loadHouseReportsSuccess,
+    (state, { reports, pagination }) => ({
+      ...state,
+      reports,
+      reportsPagination: pagination,
+      loading: false,
+      error: null,
+    })
+  ),
+
+  on(HousingActions.loadHouseReportsFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,

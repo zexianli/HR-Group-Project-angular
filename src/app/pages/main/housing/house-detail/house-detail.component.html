@@ -75,6 +75,51 @@
       </mat-card>
     </div>
 
+    <mat-card class="reports-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>report</mat-icon>
+          Facility Reports
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="(reports$ | async)?.length === 0" class="empty-reports">
+          <p>No facility reports for this house.</p>
+        </div>
+        <div *ngIf="(reports$ | async)?.length ?? 0 > 0" class="reports-list">
+          <div *ngFor="let report of reports$ | async" class="report-item">
+            <div class="report-header">
+              <h3>{{ report.title }}</h3>
+              <span
+                class="report-status"
+                [class.status-open]="report.status === 'OPEN'"
+                [class.status-in-progress]="report.status === 'IN_PROGRESS'"
+                [class.status-closed]="report.status === 'CLOSED'">
+                {{ report.status.replace('_', ' ') }}
+              </span>
+            </div>
+            <p class="report-description">{{ report.description }}</p>
+            <div class="report-meta">
+              <span>
+                <strong>Created by:</strong> {{ report.createdBy.username }}
+              </span>
+              <span>
+                <strong>Date:</strong> {{ report.createdAt | date: 'short' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <mat-paginator
+          *ngIf="reportsPagination$ | async as pagination"
+          [length]="pagination.totalReports"
+          [pageSize]="pagination.reportsPerPage"
+          [pageIndex]="pagination.currentPage - 1"
+          [hidePageSize]="true"
+          (page)="onPageChange($event)">
+        </mat-paginator>
+      </mat-card-content>
+    </mat-card>
+
     <mat-card class="residents-card">
       <mat-card-header>
         <mat-card-title>

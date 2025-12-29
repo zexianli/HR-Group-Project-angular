@@ -62,3 +62,29 @@ export interface HouseDetail {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface HouseReport {
+  id: string;
+  title: string;
+  description: string;
+  status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
+  createdBy: {
+    id: string;
+    username: string;
+    email: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface HouseReportsPagination {
+  currentPage: number;
+  totalPages: number;
+  totalReports: number;
+  reportsPerPage: number;
+}
+
+export interface HouseReportsResponse {
+  reports: HouseReport[];
+  pagination: HouseReportsPagination;
+}

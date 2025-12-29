@@ -7,6 +7,8 @@ import {
   Address,
   Landlord,
   Facility,
+  HouseReport,
+  HouseReportsPagination,
 } from '../interfaces/house.interface';
 import { environment } from '../../environments/environment';
 
@@ -23,6 +25,12 @@ export interface HouseDetailResponse {
 export interface CreateHouseResponse {
   message: string;
   data: HouseDetail;
+}
+
+export interface HouseReportsApiResponse {
+  message: string;
+  data: HouseReport[];
+  pagination: HouseReportsPagination;
 }
 
 @Injectable({
@@ -72,6 +80,25 @@ export class HousingService {
       this.api
         .post<CreateHouseResponse>('/hr/housing', houseData)
         .then(response => response.data.data)
+    );
+  }
+
+  getHouseReports(
+    houseId: string,
+    page: number = 1
+  ): Observable<{
+    reports: HouseReport[];
+    pagination: HouseReportsPagination;
+  }> {
+    return from(
+      this.api
+        .get<HouseReportsApiResponse>(`/hr/housing/${houseId}/reports`, {
+          params: { page: page.toString() },
+        })
+        .then(response => ({
+          reports: response.data.data,
+          pagination: response.data.pagination,
+        }))
     );
   }
 }
