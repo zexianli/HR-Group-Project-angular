@@ -4,6 +4,7 @@ import { take, switchMap } from 'rxjs/operators';
 import {
   EmployeeSummaryResponse,
   EmployeeSummaryProfile,
+  WorkAuth,
 } from 'src/app/interfaces/employee-profile.interface';
 import { EmployeeProfileService } from 'src/app/service/employee-profile.service';
 import { selectToken } from 'src/app/store/selectors/auth.selectors';
@@ -12,6 +13,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { EPCardComponent } from 'src/app/components/main/employee-profile/card/card.component';
+import { formatWorkAuth } from 'src/app/utils/employee';
 // import { MOCK_EMPLOYEE_SUMMARIES } from 'src/app/utils/mock';
 
 //  Allows HR to see a summary of each employee’s profile, search for a
@@ -28,6 +31,7 @@ import { CommonModule } from '@angular/common';
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatInputModule,
+    EPCardComponent,
   ],
 })
 export class EmployeeProfileComponent implements OnInit, AfterViewInit {
@@ -42,6 +46,7 @@ export class EmployeeProfileComponent implements OnInit, AfterViewInit {
   ];
   isLoading = true;
   totalCount = -1;
+  selectedEmployeeId: string | undefined = undefined;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
@@ -97,8 +102,12 @@ export class EmployeeProfileComponent implements OnInit, AfterViewInit {
     }
   }
 
-  handleElementClick() {
-    console.log('hello world');
+  handleNameClick(element: EmployeeSummaryProfile) {
+    this.selectedEmployeeId = element.id;
+  }
+
+  handleCloseCard() {
+    this.selectedEmployeeId = undefined;
   }
 
   applyFilter(event: Event) {
@@ -109,5 +118,9 @@ export class EmployeeProfileComponent implements OnInit, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  formatWorkAuth(title: WorkAuth) {
+    return formatWorkAuth(title);
   }
 }

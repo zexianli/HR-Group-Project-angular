@@ -44,6 +44,11 @@ export interface Reference {
   relationship: string;
 }
 
+export interface DriverLicense {
+  expirationDate: string;
+  number: string;
+}
+
 //
 
 export interface EmployeeSummaryResponse {
@@ -81,9 +86,10 @@ export interface EmployeeProfile {
   workPhone: string;
   workAuthorizationType: WorkAuth;
   otherWorkAuthorizationTitle: string;
-  workAuthorizationStart: string;
-  workAuthorizationEnd: string;
+  workAuthorizationStart: string | null;
+  workAuthorizationEnd: string | null;
   workAuthorizationDocKey: string;
+  driverLicense: DriverLicense | null;
   driverLicenseDocKey: string;
   emergencyContacts: EmergencyContact[];
   houseId: string;
