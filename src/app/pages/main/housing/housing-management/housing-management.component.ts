@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { HousingService } from '../../../service/housing.service';
-import { HouseSummary } from '../../../interfaces/house.interface';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { HouseSummary } from '../../../../interfaces/house.interface';
+import { HousingActions } from '../../../../store/actions/housing.actions';
+import {
+  selectAllHouses,
+  selectHousingLoading,
+  selectHousingError,
+} from '../../../../store/selectors/housing.selectors';
 
 @Component({
   selector: 'app-housing-management',
@@ -9,34 +16,25 @@ import { HouseSummary } from '../../../interfaces/house.interface';
   styleUrls: ['./housing-management.component.css'],
 })
 export class HousingManagementComponent implements OnInit {
-  houses: HouseSummary[] = [];
-  loading = false;
-  error: string | null = null;
+  houses$: Observable<HouseSummary[]>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
 
   constructor(
-    private housingService: HousingService,
+    private store: Store,
     private router: Router
-  ) {}
+  ) {
+    this.houses$ = this.store.select(selectAllHouses);
+    this.loading$ = this.store.select(selectHousingLoading);
+    this.error$ = this.store.select(selectHousingError);
+  }
 
   ngOnInit(): void {
-    this.loadHouses();
+    this.store.dispatch(HousingActions.loadHouses());
   }
 
   loadHouses(): void {
-    this.loading = true;
-    this.error = null;
-
-    this.housingService.getAllHouses().subscribe({
-      next: houses => {
-        this.houses = houses;
-        this.loading = false;
-      },
-      error: error => {
-        console.error('Error loading houses:', error);
-        this.error = 'Failed to load houses. Please try again.';
-        this.loading = false;
-      },
-    });
+    this.store.dispatch(HousingActions.loadHouses());
   }
 
   viewHouseDetails(houseId: string): void {

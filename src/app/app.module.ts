@@ -13,11 +13,18 @@ import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { authReducer } from './store/reducers/auth.reducer';
+import { housingReducer } from './store/reducers/housing.reducer';
 import { AuthEffects } from './store/effects/auth.effects';
-import { HousingManagementComponent } from './pages/main/housing-management/housing-management.component';
+import { HousingEffects } from './store/effects/housing.effects';
+import { HousingManagementComponent } from './pages/main/housing/housing-management/housing-management.component';
+import { HouseDetailComponent } from './pages/main/housing/house-detail/house-detail.component';
 
 @NgModule({
-  declarations: [AppComponent, HousingManagementComponent],
+  declarations: [
+    AppComponent,
+    HousingManagementComponent,
+    HouseDetailComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -27,8 +34,8 @@ import { HousingManagementComponent } from './pages/main/housing-management/hous
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    StoreModule.forRoot({ auth: authReducer }),
-    EffectsModule.forRoot([AuthEffects]),
+    StoreModule.forRoot({ auth: authReducer, housing: housingReducer }),
+    EffectsModule.forRoot([AuthEffects, HousingEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: !isDevMode(),

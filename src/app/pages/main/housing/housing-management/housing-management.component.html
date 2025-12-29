@@ -6,20 +6,24 @@
     </button>
   </div>
 
-  <div *ngIf="loading" class="loading-container">
+  <div *ngIf="loading$ | async" class="loading-container">
     <mat-spinner></mat-spinner>
     <p>Loading houses...</p>
   </div>
 
-  <div *ngIf="error && !loading" class="error-container">
+  <div *ngIf="(error$ | async) && !(loading$ | async)" class="error-container">
     <mat-icon color="warn">error</mat-icon>
-    <p>{{ error }}</p>
+    <p>{{ error$ | async }}</p>
     <button mat-button color="primary" (click)="loadHouses()">Retry</button>
   </div>
 
-  <div *ngIf="!loading && !error && houses.length > 0" class="houses-grid">
+  <div
+    *ngIf="
+      !(loading$ | async) && !(error$ | async) && (houses$ | async)?.length
+    "
+    class="houses-grid">
     <mat-card
-      *ngFor="let house of houses"
+      *ngFor="let house of houses$ | async"
       class="house-card"
       (click)="viewHouseDetails(house.id)">
       <mat-card-header>
@@ -52,7 +56,11 @@
   </div>
 
   <div
-    *ngIf="!loading && !error && houses.length === 0"
+    *ngIf="
+      !(loading$ | async) &&
+      !(error$ | async) &&
+      (houses$ | async)?.length === 0
+    "
     class="empty-container">
     <mat-icon>home</mat-icon>
     <p>No houses found. Please add a new one.</p>
