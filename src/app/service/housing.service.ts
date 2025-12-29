@@ -9,6 +9,7 @@ import {
   Facility,
   HouseReport,
   HouseReportsPagination,
+  ReportComment,
 } from '../interfaces/house.interface';
 import { environment } from '../../environments/environment';
 
@@ -31,6 +32,11 @@ export interface HouseReportsApiResponse {
   message: string;
   data: HouseReport[];
   pagination: HouseReportsPagination;
+}
+
+export interface ReportCommentsResponse {
+  message: string;
+  data: ReportComment[];
 }
 
 @Injectable({
@@ -99,6 +105,14 @@ export class HousingService {
           reports: response.data.data,
           pagination: response.data.pagination,
         }))
+    );
+  }
+
+  getReportComments(reportId: string): Observable<ReportComment[]> {
+    return from(
+      this.api
+        .get<ReportCommentsResponse>(`/housing/reports/${reportId}/comments`)
+        .then(response => response.data.data)
     );
   }
 }

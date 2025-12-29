@@ -33,6 +33,12 @@
 .report-item {
   padding: 15px;
   background-color: #f5f5f5;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.report-item:hover {
+  background-color: #e8e8e8;
 }
 
 .report-header {

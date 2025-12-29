@@ -24,6 +24,7 @@ import { HousingEffects } from './store/effects/housing.effects';
 import { HousingManagementComponent } from './pages/main/housing/housing-management/housing-management.component';
 import { HouseDetailComponent } from './pages/main/housing/house-detail/house-detail.component';
 import { HouseFormComponent } from './pages/main/housing/house-form/house-form.component';
+import { ReportDetailComponent } from './pages/main/housing/report-detail/report-detail.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { HouseFormComponent } from './pages/main/housing/house-form/house-form.c
     HousingManagementComponent,
     HouseDetailComponent,
     HouseFormComponent,
+    ReportDetailComponent,
   ],
   imports: [
     BrowserModule,

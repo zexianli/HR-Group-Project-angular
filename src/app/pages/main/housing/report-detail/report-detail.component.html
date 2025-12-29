@@ -1,0 +1,87 @@
+<div class="report-detail-container">
+  <div class="header">
+    <button mat-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Housing Management
+    </button>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-button color="primary" (click)="goBack()">Go Back</button>
+  </div>
+
+  <div *ngIf="report && !error" class="content">
+    <mat-card class="report-card">
+      <mat-card-header>
+        <mat-card-title>
+          <div class="title-header">
+            <h2>{{ report.title }}</h2>
+            <span
+              class="report-status"
+              [class.status-open]="report.status === 'OPEN'"
+              [class.status-in-progress]="report.status === 'IN_PROGRESS'"
+              [class.status-closed]="report.status === 'CLOSED'">
+              {{ report.status.replace('_', ' ') }}
+            </span>
+          </div>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="report-info">
+          <p class="description">{{ report.description }}</p>
+          <div class="report-meta">
+            <span>
+              <strong>Created by:</strong> {{ report.createdBy.username }}
+            </span>
+            <span>
+              <strong>Created:</strong> {{ report.createdAt | date: 'short' }}
+            </span>
+            <span>
+              <strong>Last updated:</strong>
+              {{ report.updatedAt | date: 'short' }}
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="comments-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>comment</mat-icon>
+          Comments
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div
+          *ngIf="comments$ | async as comments; else loading"
+          class="comments-container">
+          <div *ngIf="comments.length === 0" class="empty-comments">
+            <p>No comments yet.</p>
+          </div>
+
+          <div *ngIf="comments.length > 0" class="comments-list">
+            <div *ngFor="let comment of comments" class="comment-item">
+              <div class="comment-header">
+                <strong>{{ comment.createdBy.username }}</strong>
+                <span class="comment-date">{{
+                  comment.createdAt | date: 'short'
+                }}</span>
+              </div>
+              <p class="comment-message">{{ comment.message }}</p>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #loading>
+          <div class="loading-container">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading comments...</p>
+          </div>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

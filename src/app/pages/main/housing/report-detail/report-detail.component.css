@@ -1,0 +1,132 @@
+.report-detail-container {
+  padding: 20px;
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px;
+  text-align: center;
+}
+
+.report-card,
+.comments-card {
+  margin-bottom: 20px;
+}
+
+.title-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.title-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.report-status {
+  padding: 6px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.report-status.status-open {
+  background-color: #ffebee;
+  color: crimson;
+}
+
+.report-status.status-in-progress {
+  background-color: #fff3e0;
+  color: orange;
+}
+
+.report-status.status-closed {
+  background-color: #e8f5e9;
+  color: green;
+}
+
+.report-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.report-meta {
+  display: flex;
+  gap: 30px;
+  font-size: 14px;
+  color: #666;
+  flex-wrap: wrap;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+}
+
+.empty-comments {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.comment-item {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-left: 3px solid #1976d2;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.comment-header strong {
+  font-size: 14px;
+  color: #333;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: #777;
+}
+
+.comment-message {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+}

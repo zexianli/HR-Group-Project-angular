@@ -87,7 +87,10 @@
           <p>No facility reports for this house.</p>
         </div>
         <div *ngIf="(reports$ | async)?.length ?? 0 > 0" class="reports-list">
-          <div *ngFor="let report of reports$ | async" class="report-item">
+          <div
+            *ngFor="let report of reports$ | async"
+            class="report-item"
+            (click)="viewReportDetail(report)">
             <div class="report-header">
               <h3>{{ report.title }}</h3>
               <span

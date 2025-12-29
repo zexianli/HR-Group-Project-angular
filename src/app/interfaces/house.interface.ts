@@ -88,3 +88,15 @@ export interface HouseReportsResponse {
   reports: HouseReport[];
   pagination: HouseReportsPagination;
 }
+
+export interface ReportComment {
+  id: string;
+  reportId: string;
+  message: string;
+  createdBy: {
+    id: string;
+    username: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}

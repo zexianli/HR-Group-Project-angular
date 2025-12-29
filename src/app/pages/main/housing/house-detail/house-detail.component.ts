@@ -70,6 +70,12 @@ export class HouseDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['/housing-management']);
   }
 
+  viewReportDetail(report: HouseReport): void {
+    this.router.navigate(['/reports', report.id], {
+      state: { report },
+    });
+  }
+
   getFullAddress(house: HouseDetail | null): string {
     if (!house) return '';
     const { unit, street, city, state, zip } = house.address;
