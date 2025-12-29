@@ -1,0 +1,43 @@
+nav {
+  border-bottom: solid 1px rgb(140 140 140 / 0.2);
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  gap: 20px;
+}
+
+a {
+  display: block;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  border-top: solid 1px transparent;
+  border-bottom: solid 1px transparent;
+}
+
+section {
+  display: flex;
+}
+
+#nav-options {
+  gap: 20px;
+
+  a {
+    padding: 0 2px;
+    color: gray;
+    margin: 0;
+  }
+
+  a:hover {
+    color: black;
+  }
+
+  a.active {
+    color: black;
+    border-bottom: solid 1px black;
+  }
+}

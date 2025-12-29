@@ -1,0 +1,23 @@
+<nav>
+  <!-- Home, Employee Profiles, Visa Status Management, Hiring Management,
+Housing Management, Logout -->
+  <section id="nav-home">
+    <a routerLink="/dashboard">Logo</a>
+  </section>
+  <section id="nav-options">
+    <a routerLink="/dashboard" routerLinkActive="active">Home</a>
+    <a routerLink="/employee-profile" routerLinkActive="active"
+      >Employee Profile</a
+    >
+    <a routerLink="/visa-management" routerLinkActive="active"
+      >Visa Management</a
+    >
+    <a routerLink="/hiring-management" routerLinkActive="active"
+      >Hiring Management</a
+    >
+    <a routerLink="/housing-management" routerLinkActive="active"
+      >Housing Management</a
+    >
+    <a href="" (click)="$event.preventDefault(); logout()">Logout</a>
+  </section>
+</nav>

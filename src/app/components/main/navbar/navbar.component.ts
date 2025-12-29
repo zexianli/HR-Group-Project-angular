@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+
 import { AuthActions } from 'src/app/store/actions/auth.actions';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'home-navbar',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css'],
+  imports: [RouterLink, RouterLinkActive],
 })
-export class DashboardComponent {
+export class NavbarComponent {
   constructor(
     private store: Store,
     private router: Router
