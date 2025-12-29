@@ -33,3 +33,13 @@ export const selectHouseReportsPagination = createSelector(
   selectHousingState,
   (state: HousingState) => state.reportsPagination
 );
+
+export const selectCurrentReport = createSelector(
+  selectHousingState,
+  (state: HousingState) => state.currentReport
+);
+
+export const selectReportComments = createSelector(
+  selectHousingState,
+  (state: HousingState) => state.comments
+);

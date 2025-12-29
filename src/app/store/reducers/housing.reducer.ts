@@ -4,6 +4,7 @@ import {
   HouseDetail,
   HouseReport,
   HouseReportsPagination,
+  ReportComment,
 } from '../../interfaces/house.interface';
 import { HousingActions } from '../actions/housing.actions';
 
@@ -12,6 +13,8 @@ export interface HousingState {
   selectedHouse: HouseDetail | null;
   reports: HouseReport[];
   reportsPagination: HouseReportsPagination | null;
+  currentReport: HouseReport | null;
+  comments: ReportComment[];
   loading: boolean;
   error: string | null;
 }
@@ -21,6 +24,8 @@ export const initialState: HousingState = {
   selectedHouse: null,
   reports: [],
   reportsPagination: null,
+  currentReport: null,
+  comments: [],
   loading: false,
   error: null,
 };
@@ -108,6 +113,44 @@ export const housingReducer = createReducer(
   ),
 
   on(HousingActions.loadHouseReportsFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  on(HousingActions.loadReportById, state => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(HousingActions.loadReportByIdSuccess, (state, { report }) => ({
+    ...state,
+    currentReport: report,
+    loading: false,
+    error: null,
+  })),
+
+  on(HousingActions.loadReportByIdFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  on(HousingActions.loadReportComments, state => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(HousingActions.loadReportCommentsSuccess, (state, { comments }) => ({
+    ...state,
+    comments,
+    loading: false,
+    error: null,
+  })),
+
+  on(HousingActions.loadReportCommentsFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,

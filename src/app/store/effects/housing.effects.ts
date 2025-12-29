@@ -85,4 +85,42 @@ export class HousingEffects {
       )
     )
   );
+
+  loadReportById$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HousingActions.loadReportById),
+      switchMap(({ reportId }) =>
+        this.housingService.getReportById(reportId).pipe(
+          map(report => HousingActions.loadReportByIdSuccess({ report })),
+          catchError(error =>
+            of(
+              HousingActions.loadReportByIdFailure({
+                error: error.message || 'Failed to load report',
+              })
+            )
+          )
+        )
+      )
+    )
+  );
+
+  loadReportComments$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(HousingActions.loadReportComments),
+      switchMap(({ reportId }) =>
+        this.housingService.getReportComments(reportId).pipe(
+          map(comments =>
+            HousingActions.loadReportCommentsSuccess({ comments })
+          ),
+          catchError(error =>
+            of(
+              HousingActions.loadReportCommentsFailure({
+                error: error.message || 'Failed to load comments',
+              })
+            )
+          )
+        )
+      )
+    )
+  );
 }

@@ -7,6 +7,7 @@ import {
   Facility,
   HouseReport,
   HouseReportsPagination,
+  ReportComment,
 } from '../../interfaces/house.interface';
 
 export const HousingActions = createActionGroup({
@@ -38,5 +39,13 @@ export const HousingActions = createActionGroup({
       pagination: HouseReportsPagination;
     }>(),
     'Load House Reports Failure': props<{ error: string }>(),
+
+    'Load Report By Id': props<{ reportId: string }>(),
+    'Load Report By Id Success': props<{ report: HouseReport }>(),
+    'Load Report By Id Failure': props<{ error: string }>(),
+
+    'Load Report Comments': props<{ reportId: string }>(),
+    'Load Report Comments Success': props<{ comments: ReportComment[] }>(),
+    'Load Report Comments Failure': props<{ error: string }>(),
   },
 });

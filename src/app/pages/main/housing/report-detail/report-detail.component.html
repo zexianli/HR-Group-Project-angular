@@ -6,82 +6,104 @@
     </button>
   </div>
 
-  <div *ngIf="error" class="error-container">
+  <div *ngIf="error$ | async as error" class="error-container">
     <mat-icon color="warn">error</mat-icon>
     <p>{{ error }}</p>
     <button mat-button color="primary" (click)="goBack()">Go Back</button>
   </div>
 
-  <div *ngIf="report && !error" class="content">
-    <mat-card class="report-card">
-      <mat-card-header>
-        <mat-card-title>
-          <div class="title-header">
-            <h2>{{ report.title }}</h2>
-            <span
-              class="report-status"
-              [class.status-open]="report.status === 'OPEN'"
-              [class.status-in-progress]="report.status === 'IN_PROGRESS'"
-              [class.status-closed]="report.status === 'CLOSED'">
-              {{ report.status.replace('_', ' ') }}
-            </span>
-          </div>
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="report-info">
-          <p class="description">{{ report.description }}</p>
-          <div class="report-meta">
-            <span>
-              <strong>Created by:</strong> {{ report.createdBy.username }}
-            </span>
-            <span>
-              <strong>Created:</strong> {{ report.createdAt | date: 'short' }}
-            </span>
-            <span>
-              <strong>Last updated:</strong>
-              {{ report.updatedAt | date: 'short' }}
-            </span>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+  <div *ngIf="loading$ | async" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading report details...</p>
+  </div>
 
-    <mat-card class="comments-card">
-      <mat-card-header>
-        <mat-card-title>
-          <mat-icon>comment</mat-icon>
-          Comments
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div
-          *ngIf="comments$ | async as comments; else loading"
-          class="comments-container">
-          <div *ngIf="comments.length === 0" class="empty-comments">
-            <p>No comments yet.</p>
-          </div>
-
-          <div *ngIf="comments.length > 0" class="comments-list">
-            <div *ngFor="let comment of comments" class="comment-item">
-              <div class="comment-header">
-                <strong>{{ comment.createdBy.username }}</strong>
-                <span class="comment-date">{{
-                  comment.createdAt | date: 'short'
-                }}</span>
-              </div>
-              <p class="comment-message">{{ comment.message }}</p>
+  <ng-container *ngIf="!(loading$ | async)">
+    <div *ngIf="report$ | async as report" class="content">
+      <mat-card class="report-card">
+        <mat-card-header>
+          <mat-card-title>
+            <div class="title-header">
+              <h2>{{ report.title }}</h2>
+              <span
+                class="report-status"
+                [class.status-open]="report.status === 'OPEN'"
+                [class.status-in-progress]="report.status === 'IN_PROGRESS'"
+                [class.status-closed]="report.status === 'CLOSED'">
+                {{ report.status.replace('_', ' ') }}
+              </span>
+            </div>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="report-info">
+            <p class="description">{{ report.description }}</p>
+            <div class="report-meta">
+              <span>
+                <strong>Created by:</strong> {{ report.createdBy.username }}
+              </span>
+              <span>
+                <strong>Created:</strong> {{ report.createdAt | date: 'short' }}
+              </span>
             </div>
           </div>
-        </div>
+        </mat-card-content>
+      </mat-card>
 
-        <ng-template #loading>
-          <div class="loading-container">
-            <mat-spinner diameter="40"></mat-spinner>
-            <p>Loading comments...</p>
+      <mat-card class="comments-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>comment</mat-icon>
+            Comments
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="comments$ | async as comments" class="comments-container">
+            <div *ngIf="comments.length === 0" class="empty-comments">
+              <p>No comments yet.</p>
+            </div>
+
+            <div *ngIf="comments.length > 0" class="comments-list">
+              <div *ngFor="let comment of comments" class="comment-item">
+                <div class="comment-header">
+                  <strong>{{ comment.createdBy.username }}</strong>
+                  <span class="comment-date">{{
+                    comment.createdAt | date: 'short'
+                  }}</span>
+                </div>
+                <p class="comment-message">{{ comment.message }}</p>
+              </div>
+            </div>
           </div>
-        </ng-template>
-      </mat-card-content>
-    </mat-card>
-  </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="add-comment-section">
+            <mat-form-field appearance="outline" class="comment-input">
+              <mat-label>Add a comment</mat-label>
+              <textarea
+                matInput
+                [formControl]="commentControl"
+                placeholder="Write your comment..."
+                rows="3"></textarea>
+              <mat-error *ngIf="commentControl.hasError('required')">
+                Comment is required
+              </mat-error>
+            </mat-form-field>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="submitComment()"
+              [disabled]="commentControl.invalid || submittingComment">
+              <mat-spinner
+                *ngIf="submittingComment"
+                diameter="20"
+                class="button-spinner"></mat-spinner>
+              <span *ngIf="!submittingComment">Add Comment</span>
+              <span *ngIf="submittingComment">Submitting...</span>
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
 </div>

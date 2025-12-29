@@ -39,6 +39,21 @@ export interface ReportCommentsResponse {
   data: ReportComment[];
 }
 
+export interface CreateCommentResponse {
+  message: string;
+  data: {
+    id: string;
+    reportId: string;
+    message: string;
+    createdAt: string;
+  };
+}
+
+export interface ReportByIdResponse {
+  message: string;
+  data: HouseReport;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -108,10 +123,36 @@ export class HousingService {
     );
   }
 
+  getReportById(reportId: string): Observable<HouseReport> {
+    return from(
+      this.api
+        .get<ReportByIdResponse>(`/housing/reports/${reportId}`)
+        .then(response => response.data.data)
+    );
+  }
+
   getReportComments(reportId: string): Observable<ReportComment[]> {
     return from(
       this.api
         .get<ReportCommentsResponse>(`/housing/reports/${reportId}/comments`)
+        .then(response => response.data.data)
+    );
+  }
+
+  createComment(
+    reportId: string,
+    description: string
+  ): Observable<{
+    id: string;
+    reportId: string;
+    message: string;
+    createdAt: string;
+  }> {
+    return from(
+      this.api
+        .post<CreateCommentResponse>(`/housing/reports/${reportId}/comments`, {
+          description,
+        })
         .then(response => response.data.data)
     );
   }
