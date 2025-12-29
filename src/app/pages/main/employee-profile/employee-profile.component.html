@@ -21,8 +21,19 @@
   <!-- Employee summary -->
   <div id="employee-summary">
     <!-- Search bar -->
-    <div class="employee-summary-content-container" id="search-container"></div>
+    <div class="employee-summary-content-container" id="search-container">
+      <mat-form-field
+        appearance="outline"
+        style="width: 50%; min-width: 100px; margin: 22px">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          placeholder="Type the first name, last name, or the preferred name"
+          (keyup)="applyFilter($event)" />
+      </mat-form-field>
+    </div>
     <!-- Employee Table (with pagination, decide) -->
+
     <div
       class="employee-summary-content-container"
       id="employees-list-container">

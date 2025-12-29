@@ -10,7 +10,9 @@ import { selectToken } from 'src/app/store/selectors/auth.selectors';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+// import { MOCK_EMPLOYEE_SUMMARIES } from 'src/app/utils/mock';
 
 //  Allows HR to see a summary of each employee’s profile, search for a
 // particular employee, and view their entire profile.
@@ -25,6 +27,7 @@ import { CommonModule } from '@angular/common';
     MatTableModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatInputModule,
   ],
 })
 export class EmployeeProfileComponent implements OnInit, AfterViewInit {
@@ -49,6 +52,14 @@ export class EmployeeProfileComponent implements OnInit, AfterViewInit {
   // call the API to get all EmployeeProfiles
   // token$ = this.store.select(selectToken);
   ngOnInit() {
+    this.dataSource.filterPredicate = (
+      data: EmployeeSummaryProfile,
+      filter: string
+    ) => {
+      const search = filter.trim().toLowerCase();
+      return data.name.toLowerCase().includes(search);
+    };
+
     this.store
       .select(selectToken)
       .pipe(
@@ -63,11 +74,15 @@ export class EmployeeProfileComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: data => {
           this.employeeSummaries = data;
-          this.dataSource.data = data.employees;
+          this.dataSource.data = [...data.employees].sort((a, b) => {
+            let aLastName = a.name.split(' ').pop() || '';
+            let bLastName = b.name.split(' ').pop() || '';
+            return aLastName.localeCompare(bLastName);
+          });
           this.totalCount = data.totalCount;
           this.isLoading = false;
           this.dataSource.paginator = this.paginator;
-          console.log('employeeSummaries:', data.employees);
+          // console.log('employeeSummaries:', data.employees);
         },
         error: err => {
           this.isLoading = false;
@@ -84,5 +99,15 @@ export class EmployeeProfileComponent implements OnInit, AfterViewInit {
 
   handleElementClick() {
     console.log('hello world');
+  }
+
+  applyFilter(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = value.toLowerCase();
+
+    // reset paginator so results show correctly
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }
