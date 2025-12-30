@@ -1,0 +1,201 @@
+<div class="house-form-container">
+  <div class="header">
+    <h1>Add New House</h1>
+  </div>
+
+  <div *ngIf="error$ | async" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error$ | async }}</p>
+  </div>
+
+  <form [formGroup]="houseForm" (ngSubmit)="onSubmit()">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Address Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content formGroupName="address">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Unit/Apartment Number</mat-label>
+            <input matInput formControlName="unit" />
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Street Address</mat-label>
+            <input matInput formControlName="street" required />
+            <mat-error
+              *ngIf="houseForm.get('address.street')?.hasError('required')"
+              >Street address is required</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city" required />
+            <mat-error
+              *ngIf="houseForm.get('address.city')?.hasError('required')"
+              >City is required</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>State</mat-label>
+            <input matInput formControlName="state" required />
+            <mat-error
+              *ngIf="houseForm.get('address.state')?.hasError('required')"
+              >State is required</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>ZIP Code</mat-label>
+            <input matInput formControlName="zip" required />
+            <mat-error
+              *ngIf="houseForm.get('address.zip')?.hasError('required')"
+              >ZIP code is required</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Landlord Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content formGroupName="landlord">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="fullName" required />
+            <mat-error
+              *ngIf="houseForm.get('landlord.fullName')?.hasError('required')"
+              >Landlord name is required</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phone" required />
+            <mat-error
+              *ngIf="houseForm.get('landlord.phone')?.hasError('required')"
+              >Phone number is required</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" required />
+            <mat-error
+              *ngIf="houseForm.get('landlord.email')?.hasError('required')"
+              >Email is required</mat-error
+            >
+            <mat-error
+              *ngIf="houseForm.get('landlord.email')?.hasError('email')"
+              >Valid email is required</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Facility Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content formGroupName="facility">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Bedrooms</mat-label>
+            <input matInput formControlName="bedrooms" type="number" required />
+            <mat-error
+              *ngIf="houseForm.get('facility.bedrooms')?.hasError('required')"
+              >Number of bedrooms is required</mat-error
+            >
+            <mat-error
+              *ngIf="houseForm.get('facility.bedrooms')?.hasError('min')"
+              >Must be 0 or greater</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Bathrooms</mat-label>
+            <input
+              matInput
+              formControlName="bathrooms"
+              type="number"
+              required />
+            <mat-error
+              *ngIf="houseForm.get('facility.bathrooms')?.hasError('required')"
+              >Number of bathrooms is required</mat-error
+            >
+            <mat-error
+              *ngIf="houseForm.get('facility.bathrooms')?.hasError('min')"
+              >Must be 0 or greater</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Mattresses</mat-label>
+            <input matInput formControlName="mattresses" type="number" />
+            <mat-error
+              *ngIf="houseForm.get('facility.mattresses')?.hasError('min')"
+              >Must be 0 or greater</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Tables</mat-label>
+            <input matInput formControlName="tables" type="number" />
+            <mat-error *ngIf="houseForm.get('facility.tables')?.hasError('min')"
+              >Must be 0 or greater</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Chairs</mat-label>
+            <input matInput formControlName="chairs" type="number" />
+            <mat-error *ngIf="houseForm.get('facility.chairs')?.hasError('min')"
+              >Must be 0 or greater</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Additional Details</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="4"></textarea>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        type="button"
+        (click)="onCancel()"
+        [disabled]="loading$ | async">
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!houseForm.valid || (loading$ | async)">
+        <mat-icon *ngIf="loading$ | async">
+          <mat-spinner diameter="20"></mat-spinner>
+        </mat-icon>
+        {{ (loading$ | async) ? 'Creating...' : 'Create House' }}
+      </button>
+    </div>
+  </form>
+</div>
