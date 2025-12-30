@@ -1,5 +1,5 @@
 #outer-layout {
   background-color: #f4f2ee;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
 }

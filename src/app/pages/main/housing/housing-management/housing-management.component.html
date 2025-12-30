@@ -1,0 +1,68 @@
+<div class="housing-management-container">
+  <div class="header">
+    <h1>Housing Management</h1>
+    <button mat-raised-button color="primary" (click)="addNewHouse()">
+      Add New House
+    </button>
+  </div>
+
+  <div *ngIf="loading$ | async" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading houses...</p>
+  </div>
+
+  <div *ngIf="(error$ | async) && !(loading$ | async)" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error$ | async }}</p>
+    <button mat-button color="primary" (click)="loadHouses()">Retry</button>
+  </div>
+
+  <div
+    *ngIf="
+      !(loading$ | async) && !(error$ | async) && (houses$ | async)?.length
+    "
+    class="houses-grid">
+    <mat-card
+      *ngFor="let house of houses$ | async"
+      class="house-card"
+      (click)="viewHouseDetails(house.id)">
+      <mat-card-header>
+        <mat-card-title>{{ getFullAddress(house) }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="house-info">
+          <div class="info-section">
+            <h3>Landlord Information</h3>
+            <p><strong>Name:</strong> {{ house.landlord.name }}</p>
+            <p><strong>Phone:</strong> {{ house.landlord.phone }}</p>
+            <p><strong>Email:</strong> {{ house.landlord.email }}</p>
+          </div>
+          <div class="info-section">
+            <div class="residents-count">
+              <mat-icon>people</mat-icon>
+              <span
+                >{{ house.residentCount }} Resident{{
+                  house.residentCount !== 1 ? 's' : ''
+                }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary">View Details</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div
+    *ngIf="
+      !(loading$ | async) &&
+      !(error$ | async) &&
+      (houses$ | async)?.length === 0
+    "
+    class="empty-container">
+    <mat-icon>home</mat-icon>
+    <p>No houses found. Please add a new one.</p>
+  </div>
+</div>
