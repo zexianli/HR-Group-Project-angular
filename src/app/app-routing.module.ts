@@ -6,8 +6,9 @@ import { authGuard, loginGuard } from './guards/auth.guard';
 import { LayoutComponent } from './components/main/layout/layout.component';
 import { EmployeeProfileComponent } from './pages/main/employee-profile/employee-profile.component';
 import { VisaManagementComponent } from './pages/main/visa-management/visa-management.component';
-import { HiringManagementComponent } from './pages/main/hiring-management/hiring-management.component';
-import { HousingManagementComponent } from './pages/main/housing-management/housing-management.component';
+import { HousingManagementPageComponent } from '../app/pages/main/housing-management//housing-management-page.component';
+import { HouseDetailsPageComponent } from '../app/pages/main/housing-management/house-details-page.component';
+import { HiringManagementPageComponent } from '../app/pages/main/hiring-management/hiring-management-page.component';
 
 const routes: Routes = [
   {
@@ -28,8 +29,9 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'employee-profile', component: EmployeeProfileComponent },
       { path: 'visa-management', component: VisaManagementComponent },
-      { path: 'hiring-management', component: HiringManagementComponent },
-      { path: 'housing-management', component: HousingManagementComponent },
+      { path: 'hiring-management', component: HiringManagementPageComponent },
+      { path: 'housing-management', component: HousingManagementPageComponent },
+      { path: 'housing/:houseId', component: HouseDetailsPageComponent },
     ],
   },
 ];
