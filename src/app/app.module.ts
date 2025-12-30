@@ -15,7 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
-
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { authReducer } from './store/reducers/auth.reducer';
@@ -26,6 +26,8 @@ import { HousingManagementComponent } from './pages/main/housing/housing-managem
 import { HouseDetailComponent } from './pages/main/housing/house-detail/house-detail.component';
 import { HouseFormComponent } from './pages/main/housing/house-form/house-form.component';
 import { ReportDetailComponent } from './pages/main/housing/report-detail/report-detail.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from '../app/core/interceptor/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,7 @@ import { ReportDetailComponent } from './pages/main/housing/report-detail/report
     MatSelectModule,
     MatPaginatorModule,
     MatDividerModule,
+    HttpClientModule,
     StoreModule.forRoot({ auth: authReducer, housing: housingReducer }),
     EffectsModule.forRoot([AuthEffects, HousingEffects]),
     StoreDevtoolsModule.instrument({
@@ -57,7 +60,13 @@ import { ReportDetailComponent } from './pages/main/housing/report-detail/report
       logOnly: !isDevMode(),
     }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
