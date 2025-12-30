@@ -1,0 +1,95 @@
+<div id="overlay">
+  <div
+    *ngIf="isLoading"
+    style="
+      width: 100vw;
+      height: calc(100% - 53px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    ">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="!isLoading && employeeProfile as profile" id="card-container">
+    <div id="card-header">
+      <h3 style="margin: 0">
+        {{ profile._firstName }} {{ profile._lastName }}'s Profile
+      </h3>
+      <span (click)="closeCard()" style="cursor: pointer; display: block"
+        >&#10005;</span
+      >
+    </div>
+    <div id="card-content">
+      <!-- // ===== Basic info ===== -->
+      <div>
+        First name: {{ profile._firstName }}
+        <br />
+        Last name: {{ profile._lastName }}
+        <br />
+        Middle name: {{ profile._middleName }}
+        <br />
+        Preferred name: {{ profile._preferredName }}
+        <br />
+        Gender: {{ profile._gender }}
+        <br />
+        Date of birth: {{ profile._dateOfBirth }}
+        <br />
+        SSN: {{ profile._ssn }}
+      </div>
+      <br />
+
+      <!-- // ===== Contact ===== -->
+      <div>
+        Cell phone: {{ profile._cellPhone }}
+        <br />
+        Work phone: {{ profile._workPhone }}
+      </div>
+      <br />
+
+      <!-- // ===== Address ===== -->
+      <div>Address: {{ profile._address }}</div>
+      <br />
+      <!-- // ===== Car ===== -->
+      <div>
+        Car: {{ profile._carInformation }}
+        <br />
+        Driver license expiration date: {{ profile._driverLicenseExpDate }}
+        <br />
+        Driver license number: {{ profile._driverLicenseNumber }}
+      </div>
+      <br />
+
+      <!-- // ===== Work authorization ===== -->
+      <div>
+        Work Authorization Type: {{ profile._workAuthorizationType }}
+        <br />
+        Other Work Authorization title:
+        {{ profile._otherWorkAuthorizationTitle }}
+        <br />
+        Work Authorization start date: {{ profile._workAuthorizationStart }}
+        <br />
+        Work Authorization end date: {{ profile._workAuthorizationEnd }}
+      </div>
+      <br />
+
+      <!-- // ===== Emergency contacts =====
+  _emergencyContacts: Array<EmergencyContact>; -->
+
+      <!-- // ===== Reference ===== -->
+      <div>
+        Reference first name: {{ profile._referenceFirstName }}
+        <br />
+        Reference last name: {{ profile._referenceLastName }}
+        <br />
+        Reference middle name: {{ profile._referenceMiddleName }}
+        <br />
+        Reference phone number: {{ profile._referencePhone }}
+        <br />
+        Reference email: {{ profile._referenceEmail }}
+        <br />
+        Reference relationship: {{ profile._referenceRelationship }}
+      </div>
+      <br />
+    </div>
+  </div>
+</div>
