@@ -1,8 +1,15 @@
+//./hiring-management-api.service.ts
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import {
+  EmployeeDetail,
+  OnboardingApplicationListItem,
+  OnboardingApplicationDetail,
+  BackendOnboardingApplication,
+} from './hiring-management.models';
 
 export interface TokenHistoryItem {
   email: string;
@@ -14,37 +21,30 @@ export interface TokenHistoryItem {
 
 export type OnboardingStatus = 'PENDING' | 'REJECTED' | 'APPROVED';
 
-interface BackendOnboardingApplication {
-  _id: string;
-  userId: {
-    email: string;
-  } | null;
-  status: OnboardingStatus;
-  feedback: string;
-  submittedAt: string | null;
-  snapshot: {
-    firstName: string;
-    lastName: string;
-  } | null;
-}
+// export interface EmployeeDetail {
+//   id: string;
+//   username: string;
+//   email: string;
+//   role: string;
+// }
 
-export interface OnboardingApplicationListItem {
-  id: string;
-  fullName: string;
-  email: string;
-  status: OnboardingStatus;
-  submittedAt: string | null;
-}
+// export interface OnboardingApplicationListItem {
+//   id: string;
+//   fullName: string;
+//   email: string;
+//   status: OnboardingStatus;
+//   submittedAt: string | null;
+// }
 
-export interface OnboardingApplicationDetail {
-  id: string;
-  status: OnboardingStatus;
-  feedback: string;
-  submittedAt: string | null;
-  reviewedAt: string | null;
-  reviewedBy: string | null;
-  snapshot: any; // render-only snapshot
-}
+// export interface OnboardingApplicationDetail {
+//   id: string;
+//   status: OnboardingStatus;
+//   feedback: string;
+//   submittedAt: string | null;
+//   reviewedAt: string | null;
+//   reviewedBy: string | null;
+//   snapshot: any; // render-only snapshot
+// }
 
 @Injectable({ providedIn: 'root' })
 export class HiringManagementApiService {
@@ -87,6 +87,7 @@ export class HiringManagementApiService {
         map(res =>
           res.applications.map(app => ({
             id: app._id,
+            employeeId: app.userId?._id ?? '',
             fullName: app.snapshot
               ? `${app.snapshot.firstName} ${app.snapshot.lastName}`
               : '—',
@@ -95,6 +96,41 @@ export class HiringManagementApiService {
             submittedAt: app.submittedAt,
           }))
         )
+      );
+  }
+
+  getEmployeeDetail(employeeId: string): Observable<EmployeeDetail> {
+    return this.http
+      .get<any>(`${this.baseUrl}/hr/employees/${employeeId}`)
+      .pipe(
+        map(res => {
+          const e = res.employee;
+
+          return {
+            id: e._id,
+            userId: e.userId,
+
+            firstName: e.firstName,
+            middleName: e.middleName,
+            lastName: e.lastName,
+            preferredName: e.preferredName,
+
+            ssn: e.ssn,
+            dateOfBirth: e.dateOfBirth,
+            gender: e.gender,
+
+            cellPhone: e.cellPhone,
+            workPhone: e.workPhone,
+
+            workAuthorizationType: e.workAuthorizationType,
+            otherWorkAuthorizationTitle: e.otherWorkAuthorizationTitle,
+            workAuthorizationStart: e.workAuthorizationStart,
+            workAuthorizationEnd: e.workAuthorizationEnd,
+
+            address: e.address,
+            emergencyContacts: e.emergencyContacts ?? [],
+          };
+        })
       );
   }
 

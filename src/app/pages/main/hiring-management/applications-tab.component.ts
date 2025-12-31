@@ -1,11 +1,15 @@
+// ./applications-tab.component.ts
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin, of } from 'rxjs';
+
+import { HiringManagementApiService } from './hiring-management-api.service';
 import {
-  HiringManagementApiService,
   OnboardingApplicationListItem,
   OnboardingApplicationDetail,
-} from './hiring-management-api.service';
+  EmployeeDetail,
+} from './hiring-management.models';
 
 @Component({
   standalone: true,
@@ -38,7 +42,9 @@ import {
               <div class="email">{{ app.email }}</div>
             </div>
 
-            <button class="btn-ghost" (click)="openPreview(app.id)">
+            <button
+              class="btn-ghost"
+              (click)="openPreview(app.id, app.employeeId)">
               View Application
             </button>
           </div>
@@ -71,7 +77,9 @@ import {
               <div class="email">{{ app.email }}</div>
             </div>
 
-            <button class="btn-ghost" (click)="openPreview(app.id)">
+            <button
+              class="btn-ghost"
+              (click)="openPreview(app.id, app.employeeId)">
               View Application
             </button>
           </div>
@@ -104,7 +112,9 @@ import {
               <div class="email">{{ app.email }}</div>
             </div>
 
-            <button class="btn-ghost" (click)="openPreview(app.id)">
+            <button
+              class="btn-ghost"
+              (click)="openPreview(app.id, app.employeeId)">
               View Application
             </button>
           </div>
@@ -116,7 +126,7 @@ import {
       </section>
     </div>
 
-    <!-- ================= Preview Modal ================= -->
+    <!-- ================= Modal ================= -->
     <div class="backdrop" *ngIf="previewOpen" (click)="closePreview()"></div>
 
     <div class="modal" *ngIf="previewOpen" role="dialog" aria-modal="true">
@@ -139,37 +149,100 @@ import {
       </div>
 
       <div class="modal-body">
+        <!-- ================= Loading ================= -->
         <div class="loading" *ngIf="previewLoading">Loading application...</div>
 
         <ng-container *ngIf="!previewLoading && previewApp">
-          <!-- Render snapshot nicely (minimal fields + full JSON below) -->
-          <div class="section">
-            <h3>Summary</h3>
+          <!-- ================= Employee Information ================= -->
+          <div class="section" *ngIf="employee">
+            <h3>Employee Information</h3>
 
             <div class="grid">
+              <div><b>Employee ID:</b> {{ employee.id }}</div>
+
+              <div><b>First Name:</b> {{ employee.firstName }}</div>
+              <div><b>Middle Name:</b> {{ employee.middleName || '—' }}</div>
+              <div><b>Last Name:</b> {{ employee.lastName }}</div>
               <div>
-                <b>First Name:</b> {{ previewApp.snapshot?.firstName ?? '—' }}
+                <b>Preferred Name:</b> {{ employee.preferredName || '—' }}
               </div>
+
+              <div><b>SSN:</b> {{ employee.ssn }}</div>
+
               <div>
-                <b>Last Name:</b> {{ previewApp.snapshot?.lastName ?? '—' }}
+                <b>Date of Birth:</b>
+                {{ employee.dateOfBirth | date: 'date' : 'UTC' }}
               </div>
-              <div><b>SSN:</b> {{ previewApp.snapshot?.ssn ?? '—' }}</div>
+
+              <div><b>Gender:</b> {{ employee.gender }}</div>
+              <div><b>Cell Phone:</b> {{ employee.cellPhone }}</div>
+              <div><b>Work Phone:</b> {{ employee.workPhone || '—' }}</div>
+
               <div>
-                <b>DOB:</b> {{ previewApp.snapshot?.dateOfBirth ?? '—' }}
+                <b>Work Authorization:</b> {{ employee.workAuthorizationType }}
               </div>
-              <div><b>Gender:</b> {{ previewApp.snapshot?.gender ?? '—' }}</div>
+
               <div>
-                <b>Cell Phone:</b> {{ previewApp.snapshot?.cellPhone ?? '—' }}
+                <b>Authorization Period:</b>
+                {{ employee.workAuthorizationStart | date: 'date' : 'UTC' }} →
+                {{ employee.workAuthorizationEnd | date: 'date' : 'UTC' }}
               </div>
-              <div>
-                <b>Work Auth:</b>
-                {{ previewApp.snapshot?.workAuthorizationType ?? '—' }}
+            </div>
+
+            <!-- Address -->
+            <div class="section" *ngIf="employee.address">
+              <h4>Address</h4>
+              <div class="muted">
+                {{ employee.address.buildingApt }},
+                {{ employee.address.street }}, {{ employee.address.city }},
+                {{ employee.address.state }}
+                {{ employee.address.zip }}
+              </div>
+            </div>
+
+            <!-- Emergency Contact -->
+            <div class="section" *ngIf="employee.emergencyContacts?.length">
+              <h4>Emergency Contact</h4>
+
+              <div class="grid">
+                <div>
+                  <b>Name:</b>
+                  {{ employee.emergencyContacts[0].firstName }}
+                  {{ employee.emergencyContacts[0].lastName }}
+                </div>
+                <div>
+                  <b>Relationship:</b>
+                  {{ employee.emergencyContacts[0].relationship }}
+                </div>
+                <div>
+                  <b>Phone:</b> {{ employee.emergencyContacts[0].phone }}
+                </div>
+                <div>
+                  <b>Email:</b> {{ employee.emergencyContacts[0].email }}
+                </div>
               </div>
             </div>
           </div>
 
+          <!-- ================= Submitted Application Snapshot ================= -->
+          <div class="section" *ngIf="previewApp.snapshot">
+            <h3>Submitted Application</h3>
+
+            <div class="grid">
+              <div><b>First Name:</b> {{ previewApp.snapshot.firstName }}</div>
+              <div><b>Last Name:</b> {{ previewApp.snapshot.lastName }}</div>
+              <div><b>Gender:</b> {{ previewApp.snapshot.gender }}</div>
+              <div><b>Phone:</b> {{ previewApp.snapshot.cellPhone }}</div>
+              <div>
+                <b>Work Auth:</b>
+                {{ previewApp.snapshot.workAuthorizationType }}
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= Snapshot Address ================= -->
           <div class="section" *ngIf="previewApp.snapshot?.address">
-            <h3>Address</h3>
+            <h3>Application Address</h3>
             <div class="muted">
               {{ previewApp.snapshot.address.street }},
               {{ previewApp.snapshot.address.city }},
@@ -178,14 +251,23 @@ import {
             </div>
           </div>
 
-          <div
-            class="section"
-            *ngIf="previewApp.status === 'REJECTED' && previewApp.feedback">
-            <h3>Feedback</h3>
-            <div class="feedback">{{ previewApp.feedback }}</div>
+          <!-- ================= REJECTED ================= -->
+          <div class="section" *ngIf="previewApp.status === 'REJECTED'">
+            <h3>Rejection Feedback</h3>
+            <div class="feedback">
+              {{ previewApp.feedback || 'No feedback provided.' }}
+            </div>
           </div>
 
-          <!-- Actions: Pending only -->
+          <!-- ================= APPROVED ================= -->
+          <div class="section" *ngIf="previewApp.status === 'APPROVED'">
+            <h3>Approval Summary</h3>
+            <div class="muted">
+              This onboarding application has been approved.
+            </div>
+          </div>
+
+          <!-- ================= PENDING ================= -->
           <div class="section" *ngIf="previewApp.status === 'PENDING'">
             <h3>HR Review</h3>
 
@@ -211,12 +293,6 @@ import {
               </button>
             </div>
           </div>
-
-          <!-- Optional: show full snapshot JSON for “entire form” -->
-          <details class="section">
-            <summary>Show full application JSON</summary>
-            <pre class="json">{{ previewApp.snapshot | json }}</pre>
-          </details>
         </ng-container>
 
         <div class="error" *ngIf="previewError">{{ previewError }}</div>
@@ -257,7 +333,6 @@ import {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 12px;
         background: #fafafa;
       }
       .name {
@@ -266,9 +341,7 @@ import {
       .email {
         color: #6b7280;
         font-size: 13px;
-        margin-top: 4px;
       }
-
       .btn-ghost {
         height: 36px;
         padding: 0 12px;
@@ -286,8 +359,6 @@ import {
         color: #6b7280;
         text-align: center;
       }
-
-      /* Modal */
       .backdrop {
         position: fixed;
         inset: 0;
@@ -300,153 +371,88 @@ import {
         top: 50%;
         transform: translate(-50%, -50%);
         width: min(900px, calc(100vw - 24px));
-        max-height: min(85vh, 900px);
+        max-height: 85vh;
         background: #fff;
-        border: 1px solid #e5e7eb;
         border-radius: 16px;
         z-index: 51;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
       }
       .modal-hd {
         padding: 14px 16px;
         border-bottom: 1px solid #f3f4f6;
         display: flex;
         justify-content: space-between;
-        gap: 12px;
-        align-items: flex-start;
       }
       .title {
         font-weight: 900;
-        font-size: 16px;
       }
       .sub {
-        margin-top: 4px;
         color: #6b7280;
         font-size: 13px;
-        display: flex;
-        gap: 8px;
-        align-items: center;
       }
-      .x {
-        border: 1px solid #e5e7eb;
-        background: #fff;
-        border-radius: 10px;
-        height: 34px;
-        width: 34px;
-        cursor: pointer;
-      }
-
-      .modal-body {
-        padding: 14px 16px;
-        overflow: auto;
-      }
-
       .badge {
         padding: 4px 10px;
         border-radius: 999px;
         font-weight: 800;
         font-size: 12px;
-        border: 1px solid #e5e7eb;
       }
       .badge.pending {
         background: #fff7ed;
-        border-color: #fed7aa;
         color: #9a3412;
       }
       .badge.approved {
         background: #ecfdf5;
-        border-color: #a7f3d0;
         color: #065f46;
       }
       .badge.rejected {
         background: #fef2f2;
-        border-color: #fecaca;
         color: #991b1b;
       }
-
-      .section {
-        margin-top: 14px;
-      }
-      h3 {
-        margin: 0 0 8px;
-        font-size: 14px;
+      .modal-body {
+        padding: 14px 16px;
+        overflow: auto;
       }
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 10px;
       }
-      .muted {
-        color: #6b7280;
-      }
       .feedback {
         background: #fef2f2;
-        border: 1px solid #fecaca;
-        color: #991b1b;
+        padding: 10px;
         border-radius: 12px;
-        padding: 10px 12px;
-      }
-
-      .lbl {
-        font-size: 12px;
-        color: #6b7280;
-        font-weight: 800;
-        display: block;
-        margin-bottom: 6px;
+        color: #991b1b;
       }
       textarea {
         width: 100%;
         border-radius: 12px;
         border: 1px solid #e5e7eb;
-        padding: 10px 12px;
-        outline: none;
-        resize: vertical;
+        padding: 10px;
       }
-      textarea:focus {
-        border-color: #111827;
-        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
-      }
-
       .actions {
         display: flex;
         gap: 10px;
         margin-top: 10px;
       }
       .btn-approve {
-        height: 36px;
-        padding: 0 12px;
-        border-radius: 10px;
         border: 1px solid #16a34a;
         background: #ecfdf5;
-        font-weight: 800;
-        cursor: pointer;
+        border-radius: 10px;
+        padding: 6px 12px;
       }
       .btn-reject {
-        height: 36px;
-        padding: 0 12px;
-        border-radius: 10px;
         border: 1px solid #ef4444;
         background: #fef2f2;
-        font-weight: 800;
-        cursor: pointer;
-      }
-      .loading {
-        color: #6b7280;
-        padding: 10px 0;
-      }
-      .error {
-        color: #991b1b;
-        margin-top: 10px;
+        border-radius: 10px;
+        padding: 6px 12px;
       }
       .json {
         background: #0b1020;
         color: #e5e7eb;
         padding: 12px;
         border-radius: 12px;
-        overflow: auto;
       }
     `,
   ],
@@ -454,6 +460,7 @@ import {
 export class ApplicationsTabComponent {
   private api = inject(HiringManagementApiService);
 
+  // ================= Lists =================
   pending: OnboardingApplicationListItem[] = [];
   approved: OnboardingApplicationListItem[] = [];
   rejected: OnboardingApplicationListItem[] = [];
@@ -462,110 +469,151 @@ export class ApplicationsTabComponent {
   loadingApproved = false;
   loadingRejected = false;
 
-  // preview modal state
+  // ================= Preview Modal =================
   previewOpen = false;
   previewLoading = false;
   previewError = '';
+
   previewApp: OnboardingApplicationDetail | null = null;
 
-  // action state
+  // ================= Employee =================
+  employee: EmployeeDetail | null = null;
+  employeeLoading = false;
+  employeeError = '';
+  selectedEmployeeId = '';
+
+  // ================= Actions =================
   actionLoading = false;
   rejectFeedback = '';
 
+  // ================= Lifecycle =================
   ngOnInit() {
     this.load('Pending');
     this.load('Approved');
     this.load('Rejected');
   }
 
+  // ================= List Loading =================
   load(status: 'Pending' | 'Approved' | 'Rejected') {
-    if (status === 'Pending') this.loadingPending = true;
-    if (status === 'Approved') this.loadingApproved = true;
-    if (status === 'Rejected') this.loadingRejected = true;
+    this.setListLoading(status, true);
 
     this.api.getOnboardingByStatus(status).subscribe({
-      next: items => {
-        if (status === 'Pending') this.pending = items;
-        if (status === 'Approved') this.approved = items;
-        if (status === 'Rejected') this.rejected = items;
-      },
+      next: apps => this.assignList(status, apps),
       error: () => {},
-      complete: () => {
-        if (status === 'Pending') this.loadingPending = false;
-        if (status === 'Approved') this.loadingApproved = false;
-        if (status === 'Rejected') this.loadingRejected = false;
-      },
+      complete: () => this.setListLoading(status, false),
     });
   }
 
-  openPreview(id: string) {
+  private assignList(
+    status: 'Pending' | 'Approved' | 'Rejected',
+    apps: OnboardingApplicationListItem[]
+  ) {
+    if (status === 'Pending') this.pending = apps;
+    if (status === 'Approved') this.approved = apps;
+    if (status === 'Rejected') this.rejected = apps;
+  }
+
+  private setListLoading(
+    status: 'Pending' | 'Approved' | 'Rejected',
+    value: boolean
+  ) {
+    if (status === 'Pending') this.loadingPending = value;
+    if (status === 'Approved') this.loadingApproved = value;
+    if (status === 'Rejected') this.loadingRejected = value;
+  }
+
+  // ================= Preview =================
+  openPreview(documentId: string, employeeId: string) {
+    this.resetPreviewState();
     this.previewOpen = true;
     this.previewLoading = true;
-    this.previewError = '';
-    this.previewApp = null;
-    this.rejectFeedback = '';
+    this.employeeLoading = true;
+    this.selectedEmployeeId = employeeId;
 
-    // ✅ This is the request you wanted:
-    // GET http://localhost:3000/api/hr/onboarding/:id
-    this.api.getOnboardingDetail(id).subscribe({
-      next: app => {
-        this.previewApp = app;
-        // if already rejected, show existing feedback (read-only)
-        if (app.status === 'REJECTED') this.rejectFeedback = app.feedback ?? '';
+    const application$ = this.api.getOnboardingDetail(documentId);
+    const employee$ = employeeId
+      ? this.api.getEmployeeDetail(employeeId)
+      : of(null);
+
+    forkJoin({
+      application: application$,
+      employee: employee$,
+    }).subscribe({
+      next: ({ application, employee }) => {
+        console.log('Application loaded:', application);
+        console.log('Employee loaded:', employee); // 👈 ADD THIS
+        this.previewApp = application;
+        this.employee = employee ?? null;
+
+        if (application.status === 'REJECTED') {
+          this.rejectFeedback = application.feedback ?? '';
+        }
       },
       error: () => {
-        this.previewError = 'Failed to load onboarding application detail.';
+        this.previewError =
+          'Failed to load application or employee information.';
       },
       complete: () => {
         this.previewLoading = false;
+        this.employeeLoading = false;
       },
     });
   }
 
   closePreview() {
     this.previewOpen = false;
+    this.resetPreviewState();
+  }
+
+  private resetPreviewState() {
     this.previewLoading = false;
     this.previewError = '';
     this.previewApp = null;
+
+    this.employee = null;
+    this.employeeLoading = false;
+    this.employeeError = '';
+    this.selectedEmployeeId = '';
+
     this.rejectFeedback = '';
     this.actionLoading = false;
   }
 
+  // ================= Actions =================
   approveInModal() {
     if (!this.previewApp) return;
 
     this.actionLoading = true;
+
     this.api.approveOnboarding(this.previewApp.id).subscribe({
       next: () => {
-        this.actionLoading = false;
         this.closePreview();
         this.load('Pending');
         this.load('Approved');
       },
       error: () => {
-        this.actionLoading = false;
         this.previewError = 'Approve failed.';
+        this.actionLoading = false;
       },
     });
   }
 
   rejectInModal() {
-    if (!this.previewApp) return;
-    if (!this.rejectFeedback.trim()) return;
+    if (!this.previewApp || !this.rejectFeedback.trim()) return;
 
     this.actionLoading = true;
+
     this.api
       .rejectOnboarding(this.previewApp.id, this.rejectFeedback.trim())
       .subscribe({
         next: () => {
-          this.actionLoading = false;
           this.closePreview();
           this.load('Pending');
           this.load('Rejected');
         },
         error: () => {
-          this.actionLoading = false;
           this.previewError = 'Reject failed.';
+          this.actionLoading = false;
         },
       });
   }
