@@ -1,0 +1,41 @@
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+#card-container {
+  height: 200px;
+  min-width: 300px;
+  width: fit-content;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  padding: 20px;
+}
+
+#header,
+#footer {
+  flex: 0 0 30px;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 10px;
+}
+
+#main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

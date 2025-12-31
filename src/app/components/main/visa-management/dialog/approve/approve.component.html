@@ -1,0 +1,16 @@
+<div id="overlay">
+  <div id="card-container">
+    <div id="header">
+      <span (click)="closeDialog()" style="cursor: pointer; display: block"
+        >&#10005;</span
+      >
+    </div>
+    <div id="main">Are you sure you want to approve?</div>
+    <div id="footer">
+      <button mat-raised-button color="primary" (click)="approveDocument()">
+        Confirm
+      </button>
+      <button mat-raised-button (click)="closeDialog()">Cancel</button>
+    </div>
+  </div>
+</div>

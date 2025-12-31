@@ -72,9 +72,6 @@
       </div>
       <br />
 
-      <!-- // ===== Emergency contacts =====
-  _emergencyContacts: Array<EmergencyContact>; -->
-
       <!-- // ===== Reference ===== -->
       <div>
         Reference first name: {{ profile._referenceFirstName }}
@@ -90,6 +87,32 @@
         Reference relationship: {{ profile._referenceRelationship }}
       </div>
       <br />
+
+      <!-- // ===== Emergency contacts ===== -->
+      <div>
+        Emergency Contact(s):
+        <br />
+        <ul>
+          <li
+            *ngFor="let contact of profile._emergencyContacts; let i = index"
+            style="margin-bottom: 15px">
+            First name: {{ contact.firstName }}
+            <br />
+            Last name: {{ contact.lastName }}
+            <br />
+            Middle name: {{ contact.middleName }}
+            <br />
+            Phone number: {{ contact.phone }}
+            <br />
+            Email: {{ contact.email }}
+            <br />
+            Relationship: {{ contact.relationship }}
+          </li>
+          <br />
+          <br />
+          <br />
+        </ul>
+      </div>
     </div>
   </div>
 </div>

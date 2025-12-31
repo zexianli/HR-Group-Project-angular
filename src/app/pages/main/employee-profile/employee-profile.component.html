@@ -2,7 +2,7 @@
   *ngIf="isLoading"
   style="
     width: 100vw;
-    height: calc(100% - 53px);
+    height: calc(100vh - 53px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -58,7 +58,7 @@
         <ng-container matColumnDef="workAuthorizationTitle">
           <th mat-header-cell *matHeaderCellDef>Work Authorization</th>
           <td mat-cell *matCellDef="let element">
-            {{ formatWorkAuth(element.workAuthorizationTitle) }}
+            {{ element.workAuthorizationTitle }}
           </td>
         </ng-container>
 
@@ -79,7 +79,7 @@
       <mat-paginator
         #paginator
         style="position: absolute; bottom: 0; right: 0"
-        [pageSizeOptions]="[1, 5, 10]"
+        [pageSizeOptions]="[10]"
         showFirstLastButtons
         aria-label="Select page of employee(s)">
       </mat-paginator>

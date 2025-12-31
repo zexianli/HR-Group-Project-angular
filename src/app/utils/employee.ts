@@ -17,8 +17,9 @@ export function formatWorkAuth(workAuth: string): string {
     ['L2', 'L2'],
     ['F1_CPT_OPT', 'F1 (CPT/OPT)'],
     ['H4', 'H4'],
-    ['OTHER', 'Other'],
   ]);
 
-  return workAuthMap.get(workAuth) as string;
+  return workAuthMap.has(workAuth)
+    ? (workAuthMap.get(workAuth) as string)
+    : workAuth;
 }

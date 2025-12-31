@@ -1,0 +1,32 @@
+<div id="overlay">
+  <div id="card-container">
+    <div id="header">
+      <span (click)="closeDialog()" style="cursor: pointer; display: block"
+        >&#10005;</span
+      >
+    </div>
+    <div id="main">
+      <label for="feedback"
+        >Please put your feedback for the document's rejection</label
+      >
+      <textarea
+        #feedbackInput
+        (input)="feedbackErrMsg = ''"
+        name="feedback"
+        id="feedback"
+        style="height: 100%; margin-top: 20px"></textarea>
+      <span style="color: red; font-size: 10px; display: block; height: 25px">{{
+        feedbackErrMsg
+      }}</span>
+    </div>
+    <div id="footer">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="rejectDocument(feedbackInput.value)">
+        Reject
+      </button>
+      <button mat-raised-button (click)="closeDialog()">Cancel</button>
+    </div>
+  </div>
+</div>
