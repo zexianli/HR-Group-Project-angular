@@ -3,7 +3,7 @@ main {
   display: flex;
   flex-direction: row;
   gap: 30px;
-  height: calc(100% - 53px);
+  height: calc(100vh - 53px);
 }
 
 #employee-count {

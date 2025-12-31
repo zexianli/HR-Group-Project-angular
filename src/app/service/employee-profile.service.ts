@@ -6,7 +6,6 @@ import {
   EmployeeProfileResponse,
   EmployeeSummaryResponse,
 } from '../interfaces/employee-profile.interface';
-import { selectToken } from '../store/selectors/auth.selectors';
 
 @Injectable({
   providedIn: 'root',

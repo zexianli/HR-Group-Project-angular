@@ -1,1 +1,230 @@
-<p>visa-management works!</p>
+<div id="outer-container">
+  <mat-tab-group
+    mat-stretch-tabs="false"
+    mat-align-tabs="start"
+    animationDuration="0ms"
+    preserveContent>
+    <!-- In Progress -->
+    <mat-tab label="In Progress">
+      <div class="content-outer-container">
+        <div class="content-employee-cards-container">
+          <div
+            *ngFor="let employee of pendingEmployees?.employees; let i = index"
+            (click)="handleClickEmployeeCardPendingEmployees(employee)"
+            class="in-progress-employee-card">
+            <h2>{{ employee.name.legalFullName }}</h2>
+            <div class="label-container">
+              <div class="label">
+                {{ vmFormatWorkAuth(employee.workAuthorization.title) }}
+              </div>
+              <div class="label">
+                Start date:
+                {{ vmFormatDate(employee.workAuthorization.startDate) }}
+              </div>
+              <div class="label">
+                End date: {{ vmFormatDate(employee.workAuthorization.endDate) }}
+              </div>
+              <div class="label">
+                {{ daysToYMD(employee.workAuthorization.daysRemaining) }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="!isSelected"
+          class="in-progress-detail-container"
+          id="in-progress-detail-nothing">
+          <h3 style="color: #facbda">No employee selected yet</h3>
+        </div>
+        <div
+          *ngIf="isSelected"
+          class="in-progress-detail-container"
+          id="in-progress-detail-something">
+          <h1>{{ selectedEmployee?.name?.legalFullName }}</h1>
+          <h3>
+            {{ vmFormatWorkAuth(selectedEmployee?.workAuthorization?.title) }}
+          </h3>
+          <p>
+            {{ vmFormatDate(selectedEmployee?.workAuthorization?.startDate) }} -
+            {{ vmFormatDate(selectedEmployee?.workAuthorization?.endDate) }}
+          </p>
+          <p>
+            {{ selectedEmployee?.nextStep }}
+          </p>
+          <div
+            *ngIf="selectedEmployee?.actionType === 'REVIEW_DOC'"
+            class="action-buttons-container">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="handleOpenApproveDialog()">
+              Approve
+            </button>
+            <button mat-raised-button (click)="handleOpenRejectDialog()">
+              Reject
+            </button>
+          </div>
+          <div
+            *ngIf="selectedEmployee?.actionType === 'SEND_NOTIFICATION'"
+            class="action-buttons-container">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="notifyEmployee()">
+              Send Notification
+            </button>
+          </div>
+          <hr style="width: calc(100% + 17px); align-self: left; margin: 0" />
+          <div
+            *ngIf="!selectedEmployee?.pendingDocument"
+            class="document-container"
+            id="document-not-exist">
+            <h5>No document to preview</h5>
+          </div>
+          <div
+            *ngIf="selectedEmployee?.pendingDocument"
+            class="document-container"
+            id="document-exist">
+            <div class="document-clickable">
+              <img
+                src="https://www.shutterstock.com/image-vector/minimal-flat-design-icon-gray-600nw-2634007755.jpg"
+                alt=""
+                style="width: 100px; height: 100px" />
+              <p>{{ selectedEmployee?.pendingDocument?.documentType }}</p>
+              <div
+                style="
+                  margin-top: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  width: 200px;
+                ">
+                <span class="preview-clickable" (click)="showDocument()"
+                  >Preview</span
+                >
+                <span class="preview-clickable" (click)="downloadDocument()">
+                  Download</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- All Visa -->
+    <mat-tab label="All Visa">
+      <div class="content-outer-container">
+        <div class="content-employee-cards-container">
+          <div
+            *ngFor="let employee of allEmployees?.employees; let i = index"
+            (click)="handleClickEmployeeCardAllEmployees(employee)"
+            class="in-progress-employee-card">
+            <h2>{{ employee.name.legalFullName }}</h2>
+            <div class="label-container">
+              <div class="label">
+                {{ vmFormatWorkAuth(employee.workAuthorization.title) }}
+              </div>
+              <div class="label">
+                Start date:
+                {{ vmFormatDate(employee.workAuthorization.startDate) }}
+              </div>
+              <div class="label">
+                End date: {{ vmFormatDate(employee.workAuthorization.endDate) }}
+              </div>
+              <div class="label">
+                {{ daysToYMD(employee.workAuthorization.daysRemaining) }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="!isSelectedAllEmployees"
+          class="in-progress-detail-container"
+          id="in-progress-detail-nothing">
+          <h3 style="color: #facbda">No employee selected yet</h3>
+        </div>
+        <div
+          *ngIf="isSelectedAllEmployees"
+          class="in-progress-detail-container"
+          id="in-progress-detail-something">
+          <h1>{{ selectedEmployeeAllEmployees?.name?.legalFullName }}</h1>
+          <h3>
+            {{
+              vmFormatWorkAuth(
+                selectedEmployeeAllEmployees?.workAuthorization?.title
+              )
+            }}
+          </h3>
+          <p>
+            {{
+              vmFormatDate(
+                selectedEmployeeAllEmployees?.workAuthorization?.startDate
+              )
+            }}
+            -
+            {{
+              vmFormatDate(
+                selectedEmployeeAllEmployees?.workAuthorization?.endDate
+              )
+            }}
+          </p>
+          <p>
+            {{ selectedEmployeeAllEmployees?.nextStep?.nextStep }}
+          </p>
+          <hr style="width: calc(100% + 17px); align-self: left; margin: 0" />
+          <div
+            *ngIf="!selectedEmployeeAllEmployees?.approvedDocuments?.length"
+            class="document-container"
+            id="document-not-exist">
+            <h5>No approved document(s) to preview</h5>
+          </div>
+          <!-- use for loop to loop selectedEmployeeAllEmployees?.approvedDocuments? -->
+          <div
+            *ngIf="selectedEmployeeAllEmployees?.approvedDocuments?.length"
+            class="document-container"
+            id="document-exist">
+            <div
+              *ngFor="
+                let document of selectedEmployeeAllEmployees?.approvedDocuments;
+                let i = index
+              "
+              class="document-clickable">
+              <img
+                src="https://www.shutterstock.com/image-vector/minimal-flat-design-icon-gray-600nw-2634007755.jpg"
+                alt=""
+                style="width: 100px; height: 100px" />
+              <p>
+                {{ document.documentType }}
+              </p>
+              <div
+                style="
+                  margin-top: 10px;
+                  display: flex;
+                  justify-content: space-between;
+                  width: 200px;
+                ">
+                <span
+                  class="preview-clickable"
+                  (click)="showDocumentAllEmp(document)"
+                  >Preview</span
+                >
+                <span
+                  class="preview-clickable"
+                  (click)="downloadDocumentAllEmp(document)">
+                  Download</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  <visa-management-approve
+    *ngIf="showApproveDialog"
+    [documentId]="selectedEmployee?.pendingDocument?.documentId"
+    (close)="handleCloseApproveDialog()"></visa-management-approve>
+  <visa-management-reject
+    *ngIf="showRejectDialog"
+    [documentId]="selectedEmployee?.pendingDocument?.documentId"
+    (close)="handleCloseRejectDialog()"></visa-management-reject>
+</div>
