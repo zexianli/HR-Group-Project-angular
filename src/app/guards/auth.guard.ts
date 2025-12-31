@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { map, take, switchMap, catchError } from 'rxjs/operators';
 import {
@@ -15,6 +16,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const store = inject(Store);
   const router = inject(Router);
   const authService = inject(AuthService);
+  const snackBar = inject(MatSnackBar);
 
   return store.select(selectToken).pipe(
     take(1),
@@ -30,7 +32,14 @@ export const authGuard: CanActivateFn = (route, state) => {
             take(1),
             map(role => {
               if (role !== 'HR') {
-                console.error('Access denied: HR role required');
+                snackBar.open(
+                  'Access denied: HR portal is for HR users only',
+                  'Close',
+                  {
+                    duration: 5000,
+                    panelClass: ['error-snackbar'],
+                  }
+                );
                 store.dispatch(AuthActions.logout());
                 router.navigate(['/login'], { replaceUrl: true });
                 return false;
@@ -53,6 +62,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 export const loginGuard: CanActivateFn = (route, state) => {
   const store = inject(Store);
   const router = inject(Router);
+  const snackBar = inject(MatSnackBar);
 
   return store.select(selectIsAuthenticated).pipe(
     take(1),
@@ -68,7 +78,14 @@ export const loginGuard: CanActivateFn = (route, state) => {
             router.navigate(['/dashboard'], { replaceUrl: true });
             return false;
           } else {
-            console.error('Employee cannot access HR portal');
+            snackBar.open(
+              'Access denied: HR portal is for HR users only',
+              'Close',
+              {
+                duration: 5000,
+                panelClass: ['error-snackbar'],
+              }
+            );
             store.dispatch(AuthActions.logout());
             return true;
           }

@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -52,6 +53,7 @@ import { AuthInterceptor } from '../app/core/interceptor/auth.interceptor';
     MatSelectModule,
     MatPaginatorModule,
     MatDividerModule,
+    MatSnackBarModule,
     HttpClientModule,
     StoreModule.forRoot({ auth: authReducer, housing: housingReducer }),
     EffectsModule.forRoot([AuthEffects, HousingEffects]),
