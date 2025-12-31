@@ -11,6 +11,7 @@ import { HouseDetailComponent } from './pages/main/housing/house-detail/house-de
 import { HouseFormComponent } from './pages/main/housing/house-form/house-form.component';
 import { ReportDetailComponent } from './pages/main/housing/report-detail/report-detail.component';
 import { HiringManagementPageComponent } from '../app/pages/main/hiring-management/hiring-management-page.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,10 @@ const routes: Routes = [
       { path: 'housing/:id', component: HouseDetailComponent },
       { path: 'reports/:id', component: ReportDetailComponent },
     ],
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
   },
 ];
 

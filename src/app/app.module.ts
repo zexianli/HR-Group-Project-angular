@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -28,6 +29,7 @@ import { HouseFormComponent } from './pages/main/housing/house-form/house-form.c
 import { ReportDetailComponent } from './pages/main/housing/report-detail/report-detail.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../app/core/interceptor/auth.interceptor';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { AuthInterceptor } from '../app/core/interceptor/auth.interceptor';
     HouseDetailComponent,
     HouseFormComponent,
     ReportDetailComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,7 @@ import { AuthInterceptor } from '../app/core/interceptor/auth.interceptor';
     MatSelectModule,
     MatPaginatorModule,
     MatDividerModule,
+    MatSnackBarModule,
     HttpClientModule,
     StoreModule.forRoot({ auth: authReducer, housing: housingReducer }),
     EffectsModule.forRoot([AuthEffects, HousingEffects]),
