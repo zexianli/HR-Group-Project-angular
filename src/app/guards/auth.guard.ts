@@ -6,6 +6,7 @@ import { map, take, switchMap, catchError } from 'rxjs/operators';
 import {
   selectToken,
   selectIsAuthenticated,
+  selectRole,
 } from '../store/selectors/auth.selectors';
 import { AuthService } from '../service/auth.service';
 import { AuthActions } from '../store/actions/auth.actions';
@@ -24,8 +25,19 @@ export const authGuard: CanActivateFn = (route, state) => {
       }
 
       return authService.getCurrentUser(token).pipe(
-        map(() => {
-          return true;
+        switchMap(() => {
+          return store.select(selectRole).pipe(
+            take(1),
+            map(role => {
+              if (role !== 'HR') {
+                console.error('Access denied: HR role required');
+                store.dispatch(AuthActions.logout());
+                router.navigate(['/login'], { replaceUrl: true });
+                return false;
+              }
+              return true;
+            })
+          );
         }),
         catchError(error => {
           console.error('Token verification failed:', error);
@@ -44,13 +56,24 @@ export const loginGuard: CanActivateFn = (route, state) => {
 
   return store.select(selectIsAuthenticated).pipe(
     take(1),
-    map(isAuthenticated => {
-      if (isAuthenticated) {
-        router.navigate(['/dashboard'], { replaceUrl: true });
-        return false;
+    switchMap(isAuthenticated => {
+      if (!isAuthenticated) {
+        return of(true);
       }
 
-      return true;
+      return store.select(selectRole).pipe(
+        take(1),
+        map(role => {
+          if (role === 'HR') {
+            router.navigate(['/dashboard'], { replaceUrl: true });
+            return false;
+          } else {
+            console.error('Employee cannot access HR portal');
+            store.dispatch(AuthActions.logout());
+            return true;
+          }
+        })
+      );
     })
   );
 };
