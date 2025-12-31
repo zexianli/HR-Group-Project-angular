@@ -2,10 +2,13 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { of, switchMap } from 'rxjs';
+
+import { HiringManagementApiService } from './hiring-management-api.service';
 import {
-  HiringManagementApiService,
   OnboardingApplicationDetail,
-} from './hiring-management-api.service';
+  EmployeeDetail,
+} from './hiring-management.models';
 
 @Component({
   standalone: true,
@@ -32,7 +35,19 @@ import {
         <button class="btn-ghost" (click)="goBack()">Back</button>
       </header>
 
-      <!-- Snapshot (read-only) -->
+      <!-- ================= Employee Info ================= -->
+      <section class="card" *ngIf="employee">
+        <h2>Employee Information</h2>
+
+        <div class="grid">
+          <div><b>Username:</b> {{ employee.username }}</div>
+          <div><b>Email:</b> {{ employee.email }}</div>
+          <div><b>Role:</b> {{ employee.role }}</div>
+          <div><b>Employee ID:</b> {{ employee.id }}</div>
+        </div>
+      </section>
+
+      <!-- ================= Snapshot ================= -->
       <section class="card">
         <h2>Submitted Information</h2>
 
@@ -45,7 +60,8 @@ import {
           <div><b>Gender:</b> {{ app.snapshot?.gender }}</div>
           <div><b>Phone:</b> {{ app.snapshot?.cellPhone }}</div>
           <div>
-            <b>Work Authorization:</b> {{ app.snapshot?.workAuthorizationType }}
+            <b>Work Authorization:</b>
+            {{ app.snapshot?.workAuthorizationType }}
           </div>
         </div>
 
@@ -57,13 +73,13 @@ import {
         </div>
       </section>
 
-      <!-- Feedback (Rejected) -->
+      <!-- ================= Feedback ================= -->
       <section class="card" *ngIf="app.status === 'REJECTED' && app.feedback">
         <h2>Rejection Feedback</h2>
         <p class="feedback">{{ app.feedback }}</p>
       </section>
 
-      <!-- HR Actions (Pending Only) -->
+      <!-- ================= Actions ================= -->
       <section class="card actions" *ngIf="app.status === 'PENDING'">
         <h2>HR Review</h2>
 
@@ -109,7 +125,6 @@ import {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
-        gap: 12px;
       }
 
       h1 {
@@ -173,19 +188,12 @@ import {
         border-radius: 10px;
       }
 
-      .actions textarea {
+      textarea {
         width: 100%;
         margin-top: 6px;
         border-radius: 10px;
         border: 1px solid #e5e7eb;
         padding: 10px;
-        resize: vertical;
-      }
-
-      .label {
-        font-size: 13px;
-        font-weight: 700;
-        color: #374151;
       }
 
       .action-buttons {
@@ -197,21 +205,17 @@ import {
       .btn-approve {
         border: 1px solid #22c55e;
         background: #ecfdf5;
-        color: #065f46;
         border-radius: 10px;
         padding: 8px 14px;
         font-weight: 700;
-        cursor: pointer;
       }
 
       .btn-reject {
         border: 1px solid #ef4444;
         background: #fef2f2;
-        color: #991b1b;
         border-radius: 10px;
         padding: 8px 14px;
         font-weight: 700;
-        cursor: pointer;
       }
 
       .btn-ghost {
@@ -220,7 +224,6 @@ import {
         border-radius: 10px;
         padding: 6px 12px;
         font-weight: 600;
-        cursor: pointer;
       }
 
       .loading {
@@ -237,6 +240,8 @@ export class OnboardingApplicationTabComponent {
   private router = inject(Router);
 
   app!: OnboardingApplicationDetail;
+  employee: EmployeeDetail | null = null;
+
   feedback = '';
   loadingAction = false;
 
@@ -244,9 +249,18 @@ export class OnboardingApplicationTabComponent {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) return;
 
-    this.api.getOnboardingDetail(id).subscribe(app => {
-      this.app = app;
-    });
+    this.api
+      .getOnboardingDetail(id)
+      .pipe(
+        switchMap(app => {
+          this.app = app;
+          const employeeId = (app as any)?.userId?._id;
+          return employeeId ? this.api.getEmployeeDetail(employeeId) : of(null);
+        })
+      )
+      .subscribe(emp => {
+        this.employee = emp;
+      });
   }
 
   approve() {
