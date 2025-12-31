@@ -2,7 +2,10 @@ export function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
 
   const day = date.getUTCDate();
-  const month = date.toLocaleString('en-US', { month: 'long' });
+  const month = date.toLocaleString('en-US', {
+    month: 'long',
+    timeZone: 'UTC',
+  });
   const year = date.getUTCFullYear();
 
   return `${month} ${day}, ${year}`;

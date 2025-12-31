@@ -282,7 +282,7 @@ export class VisaManagementComponent implements OnInit {
           return this.visaManagementService.downloadDocument(
             token,
             document.documentType,
-            this.selectedEmployee?.employeeId || ''
+            this.selectedEmployeeAllEmployees?.employeeId || ''
           );
         })
       )
@@ -317,7 +317,7 @@ export class VisaManagementComponent implements OnInit {
           return this.visaManagementService.showDocument(
             token,
             document.documentType,
-            this.selectedEmployee?.employeeId || ''
+            this.selectedEmployeeAllEmployees?.employeeId || ''
           );
         })
       )
