@@ -37,6 +37,7 @@ export interface HouseSummary {
 }
 
 export interface Resident {
+  id: string;
   name: {
     firstName: string;
     lastName: string;
