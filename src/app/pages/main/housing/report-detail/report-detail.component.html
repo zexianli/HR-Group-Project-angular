@@ -48,7 +48,8 @@
                 <strong>Created by:</strong> {{ report.createdBy.username }}
               </span>
               <span>
-                <strong>Created:</strong> {{ report.createdAt | date: 'short' }}
+                <strong>Created:</strong>
+                {{ report.createdAt | date: 'short' : 'UTC' }}
               </span>
             </div>
           </div>
@@ -73,7 +74,7 @@
                 <div class="comment-header">
                   <strong>{{ comment.createdBy.username }}</strong>
                   <span class="comment-date">{{
-                    comment.createdAt | date: 'short'
+                    comment.createdAt | date: 'short' : 'UTC'
                   }}</span>
                 </div>
                 <p class="comment-message">{{ comment.message }}</p>

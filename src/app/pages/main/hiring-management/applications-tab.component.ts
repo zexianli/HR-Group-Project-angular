@@ -171,7 +171,7 @@ import {
 
               <div>
                 <b>Date of Birth:</b>
-                {{ employee.dateOfBirth | date: 'longDate' }}
+                {{ employee.dateOfBirth | date: 'date' : 'UTC' }}
               </div>
 
               <div><b>Gender:</b> {{ employee.gender }}</div>
@@ -184,8 +184,8 @@ import {
 
               <div>
                 <b>Authorization Period:</b>
-                {{ employee.workAuthorizationStart | date }} →
-                {{ employee.workAuthorizationEnd | date }}
+                {{ employee.workAuthorizationStart | date: 'date' : 'UTC' }} →
+                {{ employee.workAuthorizationEnd | date: 'date' : 'UTC' }}
               </div>
             </div>
 

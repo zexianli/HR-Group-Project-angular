@@ -32,7 +32,7 @@ import {
         <b>Registration Link:</b>
         <a [href]="lastLink" target="_blank">{{ lastLink }}</a>
         <div class="muted">
-          Expires at: {{ lastExpiresAt | date: 'medium' }}
+          Expires at: {{ lastExpiresAt | date: 'medium' : 'UTC' }}
         </div>
       </div>
     </div>
@@ -69,7 +69,7 @@ import {
                 {{ r.status }}
               </span>
             </td>
-            <td>{{ r.expiresAt | date: 'short' }}</td>
+            <td>{{ r.expiresAt | date: 'short' : 'UTC' }}</td>
           </tr>
         </tbody>
       </table>

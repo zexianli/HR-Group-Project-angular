@@ -121,7 +121,7 @@ export class VisaManagementService {
     return from(
       this.api
         .post<ApiResponse<VMNotifyData>>(
-          `hr/visa/documents/${employeeId}`,
+          `hr/visa/notify/${employeeId}`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },

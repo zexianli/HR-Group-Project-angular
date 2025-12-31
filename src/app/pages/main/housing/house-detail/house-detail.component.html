@@ -107,7 +107,8 @@
                 <strong>Created by:</strong> {{ report.createdBy.username }}
               </span>
               <span>
-                <strong>Date:</strong> {{ report.createdAt | date: 'short' }}
+                <strong>Date:</strong>
+                {{ report.createdAt | date: 'short' : 'UTC' }}
               </span>
             </div>
           </div>
