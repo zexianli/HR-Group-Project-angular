@@ -29,6 +29,7 @@ import { HouseFormComponent } from './pages/main/housing/house-form/house-form.c
 import { ReportDetailComponent } from './pages/main/housing/report-detail/report-detail.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../app/core/interceptor/auth.interceptor';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AuthInterceptor } from '../app/core/interceptor/auth.interceptor';
     HouseDetailComponent,
     HouseFormComponent,
     ReportDetailComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
