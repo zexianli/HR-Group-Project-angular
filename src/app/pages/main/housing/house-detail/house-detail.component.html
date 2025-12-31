@@ -137,7 +137,11 @@
         <div *ngIf="house.residents.length > 0" class="residents-list">
           <div *ngFor="let resident of house.residents" class="resident-item">
             <div class="resident-info">
-              <h3>{{ getResidentName(resident) }}</h3>
+              <h3
+                class="resident-name"
+                (click)="openResidentProfile(resident.id)">
+                {{ getResidentName(resident) }}
+              </h3>
               <p><strong>Phone:</strong> {{ resident.phone }}</p>
               <p><strong>Email:</strong> {{ resident.email }}</p>
               <div
@@ -156,5 +160,17 @@
         </div>
       </mat-card-content>
     </mat-card>
+  </div>
+</div>
+
+<div
+  *ngIf="selectedResidentId"
+  class="profile-overlay"
+  (click)="closeResidentProfile()">
+  <div class="profile-card-container" (click)="$event.stopPropagation()">
+    <employee-profile-card
+      [employeeId]="selectedResidentId"
+      (close)="closeResidentProfile()">
+    </employee-profile-card>
   </div>
 </div>
