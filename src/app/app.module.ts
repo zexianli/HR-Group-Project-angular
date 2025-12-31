@@ -29,6 +29,7 @@ import { HouseFormComponent } from './pages/main/housing/house-form/house-form.c
 import { ReportDetailComponent } from './pages/main/housing/report-detail/report-detail.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../app/core/interceptor/auth.interceptor';
+import { EPCardComponent } from './components/main/employee-profile/card/card.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
@@ -57,6 +58,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     MatDividerModule,
     MatSnackBarModule,
     HttpClientModule,
+    EPCardComponent,
     StoreModule.forRoot({ auth: authReducer, housing: housingReducer }),
     EffectsModule.forRoot([AuthEffects, HousingEffects]),
     StoreDevtoolsModule.instrument({

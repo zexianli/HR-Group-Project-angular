@@ -29,6 +29,7 @@ export class HouseDetailComponent implements OnInit, OnDestroy {
   reports$: Observable<HouseReport[]>;
   reportsPagination$: Observable<HouseReportsPagination | null>;
   currentHouseId: string | null = null;
+  selectedResidentId: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -88,5 +89,13 @@ export class HouseDetailComponent implements OnInit, OnDestroy {
     return resident.name.preferredName
       ? `${resident.name.preferredName} ${resident.name.lastName}`
       : `${resident.name.firstName} ${resident.name.lastName}`;
+  }
+
+  openResidentProfile(residentId: string): void {
+    this.selectedResidentId = residentId;
+  }
+
+  closeResidentProfile(): void {
+    this.selectedResidentId = null;
   }
 }
