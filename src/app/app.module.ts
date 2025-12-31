@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,7 @@ import { ReportDetailComponent } from './pages/main/housing/report-detail/report
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../app/core/interceptor/auth.interceptor';
 import { EPCardComponent } from './components/main/employee-profile/card/card.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { EPCardComponent } from './components/main/employee-profile/card/card.co
     HouseDetailComponent,
     HouseFormComponent,
     ReportDetailComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,6 +56,7 @@ import { EPCardComponent } from './components/main/employee-profile/card/card.co
     MatSelectModule,
     MatPaginatorModule,
     MatDividerModule,
+    MatSnackBarModule,
     HttpClientModule,
     EPCardComponent,
     StoreModule.forRoot({ auth: authReducer, housing: housingReducer }),
